@@ -1,8 +1,8 @@
 services:
   swade-pdf-exporter:
     build: .
-    ports:
-      - '3131:3131'
+    expose:
+      - "3131"
     environment:
       # Puerto interno del contenedor
       - PORT=3131
