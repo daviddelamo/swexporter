@@ -2,10 +2,10 @@ services:
   swade-pdf-exporter:
     build: .
     expose:
-      - "3131"
+      - "5050"
     environment:
       # Puerto interno del contenedor
-      - PORT=3131
+      - PORT=5050
       # Orígenes CORS permitidos (separados por coma).
       # Pon aquí la URL de tu servidor Foundry VTT.
       # Ejemplo: https://foundry.tudominio.com
