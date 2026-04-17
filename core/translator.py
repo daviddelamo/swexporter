@@ -47,7 +47,7 @@ def translate_to_spanish(text: str) -> str:
             base_url="https://api.x.ai/v1",
         )
         response = client.chat.completions.create(
-            model="grok-2-latest",
+            model="grok-4-1-fast-non-reasoning",
             messages=[
                 {"role": "system", "content": SYSTEM_INSTRUCTION},
                 {"role": "user", "content": text},
