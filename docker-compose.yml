@@ -1,8 +1,8 @@
 services:
   swade-pdf-exporter:
     build: .
-    expose:
-      - "5050"
+    ports:
+      - "5050:5050"
     environment:
       # Puerto interno del contenedor
       - PORT=5050
