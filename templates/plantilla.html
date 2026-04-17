@@ -504,9 +504,6 @@
       font-style: italic;
       margin-top: 2px;
       line-height: 1.45;
-      max-height: 3.5em;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
 
     /* ═══════════════════════════════════════════
@@ -971,7 +968,7 @@
      ═══════════════════════════════════════════ #}
   <div class="row">
     {% if armor %}
-    <div class="{% if shields %}col-2{% else %}col-full{% endif %}">
+    <div class="col-full">
       <div class="section">
         <div class="section-title"><span class="icon">🛡</span>Armaduras</div>
         <div class="section-body">
@@ -1005,7 +1002,7 @@
     {% endif %}
 
     {% if shields %}
-    <div class="{% if armor %}col-2{% else %}col-full{% endif %}">
+    <div class="col-full">
       <div class="section">
         <div class="section-title"><span class="icon">🔰</span>Escudos</div>
         <div class="section-body">

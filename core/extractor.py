@@ -108,6 +108,24 @@ def translate_rank(rank_str: str) -> str:
     return RANK_NAMES.get(rank_str.lower(), rank_str.capitalize())
 
 
+def calculate_rank_from_advances(advances: int) -> str:
+    """Calcula el rango del personaje basándose en su número de avances."""
+    try:
+        adv = int(advances)
+    except (ValueError, TypeError):
+        return "Novato"
+    if adv < 4:
+        return "Novato"
+    elif adv < 8:
+        return "Experimentado"
+    elif adv < 12:
+        return "Veterano"
+    elif adv < 16:
+        return "Heroico"
+    else:
+        return "Legendario"
+
+
 def _extract_string_or_nested(obj, *nested_keys):
     """Extrae un string de un campo que puede ser string o dict anidado."""
     if isinstance(obj, str):
@@ -150,11 +168,6 @@ def extract_basic_info(data: dict) -> dict:
     appearance_raw = details.get("appearance", "")
     appearance = strip_html(_extract_string_or_nested(appearance_raw, "value"))
 
-    rank_raw = safe_get(advances, "rank", default="")
-    if not rank_raw:
-        rank_raw = safe_get(details, "rank", default="")
-    rank = translate_rank(rank_raw) if rank_raw else rank_raw
-
     advances_total = safe_get(advances, "value", default=0)
     if not advances_total:
         advances_total = safe_get(advances, "total", default=0)
@@ -162,6 +175,9 @@ def extract_basic_info(data: dict) -> dict:
         advances_list = advances.get("list", [])
         if isinstance(advances_list, list):
             advances_total = len(advances_list)
+            
+    # El rango real se calcula en base a los avances (SWADE core rules)
+    rank = calculate_rank_from_advances(advances_total)
 
     return {
         "name": name,

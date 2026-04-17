@@ -199,6 +199,15 @@ async function exportCharacterPDF(actor) {
 
   try {
     const actorData = actor.toObject();
+    
+    // Merge calculated stats that are not in the raw data
+    if (actor.system?.stats) {
+      actorData.system.stats = foundry.utils.mergeObject(actorData.system.stats || {}, actor.system.stats);
+    }
+    if (actor.system?.pace) {
+      actorData.system.pace = foundry.utils.mergeObject(actorData.system.pace || {}, actor.system.pace);
+    }
+    
     console.log(`${MODULE_ID} | Exporting:`, actorData.name, `(${actorData.items?.length || 0} items)`);
 
     const imgBase64 = await fetchPortraitBase64(actor.img);
