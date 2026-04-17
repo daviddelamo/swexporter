@@ -23,8 +23,9 @@ COPY core/ core/
 COPY api/ api/
 COPY templates/ templates/
 
-# Puerto del servidor
-EXPOSE 5050
+# Puerto del servidor (Coolify espera 3000 por defecto)
+ENV PORT=3000
+EXPOSE 3000
 
 # Ejecutar el servidor
-CMD ["uvicorn", "api.server:app", "--host", "0.0.0.0", "--port", "5050"]
+CMD uvicorn api.server:app --host 0.0.0.0 --port $PORT
