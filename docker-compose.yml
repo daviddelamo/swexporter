@@ -2,10 +2,10 @@ services:
   swade-pdf-exporter:
     build: .
     ports:
-      - "5050:5050"
+      - "5050:80"
     environment:
-      # Puerto interno del contenedor
-      - PORT=5050
+      # Puerto interno del contenedor (80 para que Coolify/Traefik lo detecte por defecto)
+      - PORT=80
       # Orígenes CORS permitidos (separados por coma).
       # Pon aquí la URL de tu servidor Foundry VTT.
       # Ejemplo: https://foundry.tudominio.com
@@ -13,7 +13,7 @@ services:
       - CORS_ORIGINS=*
     restart: unless-stopped
     healthcheck:
-      test: [ "CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:5050/health')\"" ]
+      test: [ "CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:80/health')\"" ]
       interval: 30s
       timeout: 10s
       retries: 3
