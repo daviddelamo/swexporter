@@ -304,7 +304,7 @@ def extract_skills(data: dict) -> list:
             die = sys.get("die", {})
             attr_key = sys.get("attribute", "")
             skills.append({
-                "name": item.get("name", "Desconocida"),
+                "name": translate_to_spanish(item.get("name", "Desconocida")),
                 "die": format_die(die),
                 "sides": die.get("sides", 0),
                 "modifier": die.get("modifier", 0),
@@ -325,7 +325,7 @@ def extract_edges(data: dict) -> list:
             sys = item.get("system", {})
             desc = strip_html(sys.get("description", ""))
             edges.append({
-                "name": item.get("name", ""),
+                "name": translate_to_spanish(item.get("name", "")),
                 "description": translate_to_spanish(desc),
                 "rank": sys.get("rank", ""),
                 "is_racial": sys.get("isRacial", False),
@@ -344,7 +344,7 @@ def extract_hindrances(data: dict) -> list:
             is_major = sys.get("major", False)
             desc = strip_html(sys.get("description", ""))
             hindrances.append({
-                "name": item.get("name", ""),
+                "name": translate_to_spanish(item.get("name", "")),
                 "description": translate_to_spanish(desc),
                 "severity": "Mayor" if is_major else "Menor",
             })
@@ -361,7 +361,7 @@ def extract_abilities(data: dict) -> list:
             sys = item.get("system", {})
             desc = strip_html(sys.get("description", ""))
             abilities.append({
-                "name": item.get("name", ""),
+                "name": translate_to_spanish(item.get("name", "")),
                 "description": translate_to_spanish(desc),
             })
     abilities.sort(key=lambda a: a["name"])
@@ -377,7 +377,7 @@ def extract_weapons(data: dict) -> list:
             sys = item.get("system", {})
             equip = sys.get("equipStatus", 0)
             weapons.append({
-                "name": item.get("name", ""),
+                "name": translate_to_spanish(item.get("name", "")),
                 "damage": sys.get("damage", "—"),
                 "ap": sys.get("ap", 0),
                 "range": sys.get("range", "Cuerpo a cuerpo"),
@@ -413,7 +413,7 @@ def extract_armor(data: dict) -> list:
             if locs.get("legs"):
                 covered.append("Piernas")
             armor_list.append({
-                "name": item.get("name", ""),
+                "name": translate_to_spanish(item.get("name", "")),
                 "armor": sys.get("armor", 0),
                 "notes": translate_to_spanish(sys.get("notes", "")),
                 "weight": sys.get("weight", 0),
@@ -435,7 +435,7 @@ def extract_shields(data: dict) -> list:
             sys = item.get("system", {})
             equip = sys.get("equipStatus", 0)
             shields.append({
-                "name": item.get("name", ""),
+                "name": translate_to_spanish(item.get("name", "")),
                 "parry": sys.get("parry", 0),
                 "cover": sys.get("cover", 0),
                 "armor": sys.get("armor", 0),
@@ -459,7 +459,7 @@ def extract_gear(data: dict) -> list:
             equip = sys.get("equipStatus", 0)
             desc = strip_html(sys.get("description", ""))
             gear.append({
-                "name": item.get("name", ""),
+                "name": translate_to_spanish(item.get("name", "")),
                 "description": translate_to_spanish(desc),
                 "weight": sys.get("weight", 0),
                 "price": sys.get("price", 0),
@@ -518,7 +518,7 @@ def extract_powers(data: dict) -> dict:
             if not skill:
                 skill = safe_get(sys, "actions", "trait", default="")
             powers.append({
-                "name": item.get("name", ""),
+                "name": translate_to_spanish(item.get("name", "")),
                 "pp": sys.get("pp", "—"),
                 "range": sys.get("range", "—"),
                 "duration": sys.get("duration", "—"),
