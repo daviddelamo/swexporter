@@ -1,0 +1,477 @@
+{
+  "name": "Tharion Llama de Hierro",
+  "type": "character",
+  "img": "tokens/tharion.webp",
+  "system": {
+    "details": {
+      "species": {
+        "name": "Enano"
+      },
+      "archetype": {
+        "name": "Guerrero"
+      },
+      "biography": {
+        "value": "<p>Un enano forjado en las llamas de las fraguas ancestrales de Kragheim. Veterano de la Guerra de los Huesos, Tharion juró proteger a los inocentes con su hacha y su voluntad inquebrantable.</p>"
+      },
+      "appearance": {
+        "value": "Enano fornido con barba trenzada de color cobrizo, cicatriz en la mejilla izquierda y ojos grises como el acero."
+      },
+      "autoCalcToughness": true,
+      "autoCalcParry": true
+    },
+    "attributes": {
+      "agility": {
+        "die": { "sides": 6, "modifier": 0 },
+        "unSkilled": false
+      },
+      "smarts": {
+        "die": { "sides": 6, "modifier": 0 },
+        "unSkilled": false
+      },
+      "spirit": {
+        "die": { "sides": 8, "modifier": 0 },
+        "unSkilled": false
+      },
+      "strength": {
+        "die": { "sides": 10, "modifier": 0 },
+        "unSkilled": false
+      },
+      "vigor": {
+        "die": { "sides": 8, "modifier": 0 },
+        "unSkilled": false
+      }
+    },
+    "stats": {
+      "speed": {
+        "runningDie": { "sides": 6, "modifier": 0 },
+        "value": 5,
+        "adjusted": 5
+      },
+      "toughness": {
+        "value": 10,
+        "armor": 4,
+        "modifier": 0
+      },
+      "parry": {
+        "value": 8,
+        "modifier": 1
+      },
+      "size": 0
+    },
+    "vitals": {
+      "bennies": {
+        "value": 3,
+        "max": 3
+      },
+      "wounds": {
+        "value": 0,
+        "max": 3,
+        "ignored": 0
+      },
+      "fatigue": {
+        "value": 0,
+        "max": 2
+      }
+    },
+    "advances": {
+      "value": 12,
+      "rank": "Veterano"
+    },
+    "powerPoints": {
+      "general": {
+        "value": 15,
+        "max": 15
+      }
+    },
+    "encumbrance": {
+      "value": 28,
+      "max": 40
+    },
+    "currency": 245,
+    "description": ""
+  },
+  "items": [
+    {
+      "name": "Pelear",
+      "type": "skill",
+      "system": {
+        "attribute": "agility",
+        "die": { "sides": 10, "modifier": 1 },
+        "isCoreSkill": false
+      }
+    },
+    {
+      "name": "Atletismo",
+      "type": "skill",
+      "system": {
+        "attribute": "agility",
+        "die": { "sides": 6, "modifier": 0 },
+        "isCoreSkill": true
+      }
+    },
+    {
+      "name": "Notar",
+      "type": "skill",
+      "system": {
+        "attribute": "smarts",
+        "die": { "sides": 8, "modifier": 0 },
+        "isCoreSkill": true
+      }
+    },
+    {
+      "name": "Provocar",
+      "type": "skill",
+      "system": {
+        "attribute": "smarts",
+        "die": { "sides": 6, "modifier": 0 },
+        "isCoreSkill": false
+      }
+    },
+    {
+      "name": "Persuadir",
+      "type": "skill",
+      "system": {
+        "attribute": "spirit",
+        "die": { "sides": 4, "modifier": 0 },
+        "isCoreSkill": true
+      }
+    },
+    {
+      "name": "Intimidar",
+      "type": "skill",
+      "system": {
+        "attribute": "spirit",
+        "die": { "sides": 8, "modifier": 0 },
+        "isCoreSkill": false
+      }
+    },
+    {
+      "name": "Disparar",
+      "type": "skill",
+      "system": {
+        "attribute": "agility",
+        "die": { "sides": 6, "modifier": 0 },
+        "isCoreSkill": false
+      }
+    },
+    {
+      "name": "Sigilo",
+      "type": "skill",
+      "system": {
+        "attribute": "agility",
+        "die": { "sides": 4, "modifier": 0 },
+        "isCoreSkill": true
+      }
+    },
+    {
+      "name": "Sanar",
+      "type": "skill",
+      "system": {
+        "attribute": "smarts",
+        "die": { "sides": 6, "modifier": 0 },
+        "isCoreSkill": false
+      }
+    },
+    {
+      "name": "Conocimiento General",
+      "type": "skill",
+      "system": {
+        "attribute": "smarts",
+        "die": { "sides": 6, "modifier": 0 },
+        "isCoreSkill": true
+      }
+    },
+    {
+      "name": "Lanzamiento de conjuros",
+      "type": "skill",
+      "system": {
+        "attribute": "smarts",
+        "die": { "sides": 8, "modifier": 0 },
+        "isCoreSkill": false
+      }
+    },
+    {
+      "name": "Combatiente",
+      "type": "edge",
+      "system": {
+        "description": "<p>+1 a las tiradas de Pelear.</p>",
+        "isRacial": false,
+        "rank": "Novato"
+      }
+    },
+    {
+      "name": "Barrido",
+      "type": "edge",
+      "system": {
+        "description": "<p>Ataca a todos los objetivos adyacentes con una penalización de -2.</p>",
+        "isRacial": false,
+        "rank": "Experimentado"
+      }
+    },
+    {
+      "name": "Temple",
+      "type": "edge",
+      "system": {
+        "description": "<p>+2 a las tiradas de recuperación de aturdido.</p>",
+        "isRacial": false,
+        "rank": "Novato"
+      }
+    },
+    {
+      "name": "Trasfondo Arcano (Milagros)",
+      "type": "edge",
+      "system": {
+        "description": "<p>El personaje obtiene acceso a poderes mágicos mediante la fe divina. Usa Lanzamiento de conjuros como habilidad arcana.</p>",
+        "isRacial": false,
+        "rank": "Novato"
+      }
+    },
+    {
+      "name": "Bloqueo",
+      "type": "edge",
+      "system": {
+        "description": "<p>+1 a Parada.</p>",
+        "isRacial": false,
+        "rank": "Experimentado"
+      }
+    },
+    {
+      "name": "Juramento (Mayor)",
+      "type": "hindrance",
+      "system": {
+        "description": "<p>Ha jurado proteger al débil y destruir muertos vivientes.</p>",
+        "major": true
+      }
+    },
+    {
+      "name": "Leal (Menor)",
+      "type": "hindrance",
+      "system": {
+        "description": "<p>Nunca abandonará a un compañero.</p>",
+        "major": false
+      }
+    },
+    {
+      "name": "Heroico (Mayor)",
+      "type": "hindrance",
+      "system": {
+        "description": "<p>Siempre ayuda a los necesitados, se involucra en problemas ajenos.</p>",
+        "major": true
+      }
+    },
+    {
+      "name": "Visión en la oscuridad",
+      "type": "ability",
+      "system": {
+        "description": "<p>Los enanos ven en la penumbra. Ignoran penalizadores de iluminación Tenue y Oscuridad (pero no Oscuridad Total).</p>"
+      }
+    },
+    {
+      "name": "Resistente",
+      "type": "ability",
+      "system": {
+        "description": "<p>Los enanos son particularmente robustos. Comienzan con un d6 en Vigor en lugar de un d4.</p>"
+      }
+    },
+    {
+      "name": "Paso Reducido",
+      "type": "ability",
+      "system": {
+        "description": "<p>Los enanos tienen Paso 5 y un dado de carrera de d4.</p>"
+      }
+    },
+    {
+      "name": "Hacha de guerra enana",
+      "type": "weapon",
+      "system": {
+        "damage": "FUE+d10",
+        "ap": 2,
+        "range": "",
+        "rof": "1",
+        "notes": "Dos manos, PA 2",
+        "equipStatus": 3,
+        "isNatural": false,
+        "weight": 5,
+        "price": 400,
+        "quantity": 1,
+        "minStr": "d8",
+        "actions": {
+          "skill": "Pelear"
+        }
+      }
+    },
+    {
+      "name": "Hacha de mano",
+      "type": "weapon",
+      "system": {
+        "damage": "FUE+d6",
+        "ap": 0,
+        "range": "3/6/12",
+        "rof": "1",
+        "notes": "Arrojadiza",
+        "equipStatus": 1,
+        "isNatural": false,
+        "weight": 2,
+        "price": 100,
+        "quantity": 2,
+        "minStr": "d6",
+        "actions": {
+          "skill": "Pelear"
+        }
+      }
+    },
+    {
+      "name": "Cota de mallas",
+      "type": "armor",
+      "system": {
+        "armor": 3,
+        "minStr": "d8",
+        "notes": "Cubre torso, brazos y piernas",
+        "equipStatus": 3,
+        "isNatural": false,
+        "weight": 15,
+        "price": 300,
+        "locations": {
+          "torso": true,
+          "arms": true,
+          "legs": true,
+          "head": false
+        }
+      }
+    },
+    {
+      "name": "Yelmo de acero",
+      "type": "armor",
+      "system": {
+        "armor": 4,
+        "minStr": "d6",
+        "notes": "50% de proteger la cabeza",
+        "equipStatus": 3,
+        "isNatural": false,
+        "weight": 2,
+        "price": 60,
+        "locations": {
+          "torso": false,
+          "arms": false,
+          "legs": false,
+          "head": true
+        }
+      }
+    },
+    {
+      "name": "Escudo mediano",
+      "type": "shield",
+      "system": {
+        "parry": 2,
+        "cover": 0,
+        "armor": 0,
+        "notes": "+2 Parada",
+        "equipStatus": 3,
+        "isNatural": false,
+        "weight": 6,
+        "price": 100,
+        "minStr": "d8"
+      }
+    },
+    {
+      "name": "Mochila",
+      "type": "gear",
+      "system": {
+        "description": "<p>Mochila de viaje resistente.</p>",
+        "equipStatus": 3,
+        "weight": 1,
+        "price": 5,
+        "quantity": 1
+      }
+    },
+    {
+      "name": "Raciones (5 días)",
+      "type": "gear",
+      "system": {
+        "description": "<p>Comida seca para 5 días de viaje.</p>",
+        "equipStatus": 3,
+        "weight": 2,
+        "price": 10,
+        "quantity": 1
+      }
+    },
+    {
+      "name": "Cuerda (10 m)",
+      "type": "gear",
+      "system": {
+        "description": "<p>Cuerda de cáñamo resistente.</p>",
+        "equipStatus": 3,
+        "weight": 3,
+        "price": 5,
+        "quantity": 1
+      }
+    },
+    {
+      "name": "Pedernal y acero",
+      "type": "gear",
+      "system": {
+        "description": "<p>Herramientas para encender fuego.</p>",
+        "equipStatus": 3,
+        "weight": 0.5,
+        "price": 3,
+        "quantity": 1
+      }
+    },
+    {
+      "name": "Símbolo sagrado de Torag",
+      "type": "gear",
+      "system": {
+        "description": "<p>Foco arcano para canalizar milagros divinos. Medallón de hierro con el martillo de Torag.</p>",
+        "equipStatus": 3,
+        "weight": 0.5,
+        "price": 25,
+        "quantity": 1
+      }
+    },
+    {
+      "name": "Alivio",
+      "type": "power",
+      "system": {
+        "rank": "Novato",
+        "pp": "1",
+        "range": "Toque",
+        "duration": "Instantáneo",
+        "trapping": "Luz dorada que emana de las manos",
+        "damage": "",
+        "description": "<p>Elimina un nivel de Herida o Fatiga, o elimina el estado de Aturdido.</p>",
+        "skill": "Lanzamiento de conjuros",
+        "arcane": "Milagros"
+      }
+    },
+    {
+      "name": "Armadura",
+      "type": "power",
+      "system": {
+        "rank": "Novato",
+        "pp": "1",
+        "range": "Toque",
+        "duration": "5 rondas",
+        "trapping": "Resplandor dorado que envuelve al objetivo",
+        "damage": "",
+        "description": "<p>Otorga +2/+4 puntos de Armadura al objetivo.</p>",
+        "skill": "Lanzamiento de conjuros",
+        "arcane": "Milagros"
+      }
+    },
+    {
+      "name": "Castigo",
+      "type": "power",
+      "system": {
+        "rank": "Experimentado",
+        "pp": "4",
+        "range": "Espíritu",
+        "duration": "Instantáneo",
+        "trapping": "Rayo de energía divina",
+        "damage": "3d6",
+        "description": "<p>Inflige 3d6 de daño (o 4d6 con aumento) en un área. Especialmente efectivo contra muertos vivientes.</p>",
+        "skill": "Lanzamiento de conjuros",
+        "arcane": "Milagros"
+      }
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "SWADE_PDF.ExportPDF": "Exportar PDF",
+  "SWADE_PDF.Generating": "Generando hoja de personaje PDF...",
+  "SWADE_PDF.Success": "¡PDF generado correctamente!",
+  "SWADE_PDF.Error": "Error al generar el PDF",
+  "SWADE_PDF.ErrorConnection": "No se pudo conectar con el servidor de exportación. Verifica la URL del API.",
+  "SWADE_PDF.Settings.ApiUrl.Name": "URL del API",
+  "SWADE_PDF.Settings.ApiUrl.Hint": "URL del servidor Python que genera los PDFs (ej: https://swexporter.tudominio.com)"
+}

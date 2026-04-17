@@ -1,2 +1,4 @@
-Jinja2>=3.1
-WeasyPrint>=60.0
+Jinja2
+WeasyPrint
+fastapi
+uvicorn[standard]

@@ -1,0 +1,14 @@
+.git
+.venv
+*.pdf
+*.json
+!templates/**
+images/
+__pycache__
+*.pyc
+.dockerignore
+Dockerfile
+docker-compose.yml
+foundry-module/
+README.md
+ejemplo_personaje.json

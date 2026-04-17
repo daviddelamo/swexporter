@@ -1,0 +1,41 @@
+{
+  "id": "swade-pdf-exporter",
+  "title": "SWADE PDF Character Exporter",
+  "description": "Exporta hojas de personaje SWADE a PDF con estilo de fantasía épica. Requiere un servidor API externo.",
+  "version": "1.0.0",
+  "authors": [
+    {
+      "name": "ddelamo"
+    }
+  ],
+  "compatibility": {
+    "minimum": "11",
+    "verified": "13"
+  },
+  "relationships": {
+    "systems": [
+      {
+        "id": "swade",
+        "type": "system"
+      }
+    ]
+  },
+  "esmodules": [
+    "scripts/swade-pdf-exporter.js"
+  ],
+  "styles": [
+    "styles/swade-pdf-exporter.css"
+  ],
+  "languages": [
+    {
+      "lang": "es",
+      "name": "Español",
+      "path": "lang/es.json"
+    },
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ]
+}

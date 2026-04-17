@@ -1,0 +1,52 @@
+/* ═══════════════════════════════════════════
+   SWADE PDF Exporter — Button Styles
+   ═══════════════════════════════════════════ */
+
+.swade-pdf-export-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  margin-left: 4px;
+  background: linear-gradient(135deg, #8b1a1a 0%, #6b0f0f 100%);
+  color: #e8d48b;
+  border: 1px solid #c9a84c;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: all 0.2s ease;
+  line-height: 24px;
+}
+
+.swade-pdf-export-btn:hover {
+  background: linear-gradient(135deg, #a02020 0%, #8b1a1a 100%);
+  color: #fff;
+  border-color: #e8d48b;
+  box-shadow: 0 0 6px rgba(201, 168, 76, 0.4);
+}
+
+.swade-pdf-export-btn:active {
+  transform: scale(0.97);
+}
+
+.swade-pdf-export-btn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.swade-pdf-export-btn i {
+  font-size: 11px;
+}
+
+/* Spinner animation when generating */
+.swade-pdf-export-btn .fa-spinner {
+  animation: swade-pdf-spin 1s linear infinite;
+}
+
+@keyframes swade-pdf-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
