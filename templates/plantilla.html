@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ info.name }} — Hoja de Personaje SWADE</title>
+  <style>
+    /* ═══════════════════════════════════════════
+       FUENTES
+       ═══════════════════════════════════════════ */
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cinzel+Decorative:wght@400;700;900&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=IM+Fell+English:ital@0;1&display=swap');
+
+    /* ═══════════════════════════════════════════
+       VARIABLES & RESET
+       ═══════════════════════════════════════════ */
+    :root {
+      --color-bg: #f5edd6;
+      --color-bg-dark: #e8dbbf;
+      --color-parchment: #faf3e0;
+      --color-ink: #2c1810;
+      --color-ink-light: #5c3d2e;
+      --color-red: #8b1a1a;
+      --color-red-dark: #6b0f0f;
+      --color-gold: #c9a84c;
+      --color-gold-dark: #a07b28;
+      --color-gold-light: #e8d48b;
+      --color-border: #6b3a2a;
+      --color-accent: #4a2520;
+      --color-header-bg: #3d1c14;
+      --color-table-alt: #f0e4c8;
+      --color-tag-bg: rgba(139, 26, 26, 0.1);
+      --font-title: 'Cinzel Decorative', 'Cinzel', serif;
+      --font-heading: 'Cinzel', serif;
+      --font-body: 'Crimson Text', 'IM Fell English', Georgia, serif;
+      --font-mono: 'Courier New', Courier, monospace;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* ═══════════════════════════════════════════
+       PÁGINA
+       ═══════════════════════════════════════════ */
+    @page {
+      size: A4;
+      margin: 12mm 10mm 14mm 10mm;
+
+      @bottom-center {
+        content: "— " counter(page) " —";
+        font-family: var(--font-heading);
+        font-size: 9pt;
+        color: var(--color-ink-light);
+      }
+    }
+
+    body {
+      font-family: var(--font-body);
+      font-size: 10pt;
+      line-height: 1.45;
+      color: var(--color-ink);
+      background: var(--color-parchment);
+    }
+
+    /* ═══════════════════════════════════════════
+       ENCABEZADO PRINCIPAL
+       ═══════════════════════════════════════════ */
+    .sheet-header {
+      background: linear-gradient(135deg, var(--color-header-bg) 0%, var(--color-red-dark) 50%, var(--color-header-bg) 100%);
+      color: var(--color-gold);
+      padding: 16px 24px;
+      border: 3px solid var(--color-gold-dark);
+      border-radius: 4px;
+      margin-bottom: 12px;
+      position: relative;
+      text-align: center;
+    }
+
+    .sheet-header::before,
+    .sheet-header::after {
+      content: "✦";
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 18pt;
+      color: var(--color-gold);
+      opacity: 0.6;
+    }
+
+    .sheet-header::before { left: 12px; }
+    .sheet-header::after { right: 12px; }
+
+    .character-name {
+      font-family: var(--font-title);
+      font-size: 22pt;
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--color-gold-light);
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+      margin-bottom: 4px;
+    }
+
+    .character-subtitle {
+      font-family: var(--font-heading);
+      font-size: 10pt;
+      font-weight: 400;
+      color: var(--color-gold);
+      letter-spacing: 1px;
+      opacity: 0.9;
+    }
+
+    .character-subtitle .sep {
+      margin: 0 6px;
+      opacity: 0.5;
+    }
+
+    /* ═══════════════════════════════════════════
+       PORTRAIT / ARTWORK
+       ═══════════════════════════════════════════ */
+    .header-with-portrait {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .character-portrait {
+      flex-shrink: 0;
+      width: 120px;
+      height: 120px;
+      border: 3px solid var(--color-gold);
+      border-radius: 50%;
+      overflow: hidden;
+      box-shadow: 0 0 12px rgba(201, 168, 76, 0.4),
+                  inset 0 0 6px rgba(0, 0, 0, 0.3);
+    }
+
+    .character-portrait img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .character-info {
+      flex: 1;
+      text-align: center;
+    }
+
+    /* ═══════════════════════════════════════════
+       INFO BÁSICA
+       ═══════════════════════════════════════════ */
+    .info-bar {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .info-pill {
+      background: var(--color-tag-bg);
+      border: 1px solid var(--color-red);
+      border-radius: 20px;
+      padding: 3px 14px;
+      font-family: var(--font-heading);
+      font-size: 8.5pt;
+      font-weight: 600;
+      color: var(--color-red-dark);
+      letter-spacing: 0.5px;
+    }
+
+    .info-pill .label {
+      font-weight: 400;
+      color: var(--color-ink-light);
+      margin-right: 4px;
+    }
+
+    /* ═══════════════════════════════════════════
+       SECCIONES
+       ═══════════════════════════════════════════ */
+    .section {
+      border: 2px solid var(--color-border);
+      border-radius: 3px;
+      margin-bottom: 12px;
+      overflow: hidden;
+      page-break-inside: avoid;
+    }
+
+    .section-title {
+      background: linear-gradient(90deg, var(--color-header-bg), var(--color-red-dark));
+      color: var(--color-gold-light);
+      font-family: var(--font-heading);
+      font-size: 11pt;
+      font-weight: 700;
+      padding: 6px 14px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      border-bottom: 2px solid var(--color-gold-dark);
+      position: relative;
+    }
+
+    .section-title::after {
+      content: "";
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: var(--color-gold);
+      opacity: 0.3;
+    }
+
+    .section-title .icon {
+      margin-right: 6px;
+      font-size: 10pt;
+    }
+
+    .section-body {
+      padding: 10px 14px;
+      background: var(--color-parchment);
+    }
+
+    /* ═══════════════════════════════════════════
+       LAYOUT DE DOS Y TRES COLUMNAS
+       ═══════════════════════════════════════════ */
+    .row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .col-2 { flex: 1 1 50%; min-width: 0; }
+    .col-3 { flex: 1 1 33.33%; min-width: 0; }
+    .col-full { flex: 1 1 100%; min-width: 0; }
+
+    /* ═══════════════════════════════════════════
+       ATRIBUTOS (dados grandes)
+       ═══════════════════════════════════════════ */
+    .attributes-grid {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .attr-card {
+      text-align: center;
+      width: 95px;
+      border: 2px solid var(--color-gold-dark);
+      border-radius: 6px;
+      background: linear-gradient(180deg, var(--color-bg) 0%, var(--color-bg-dark) 100%);
+      padding: 8px 6px 6px;
+      position: relative;
+    }
+
+    .attr-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--color-gold), var(--color-red), var(--color-gold));
+      border-radius: 4px 4px 0 0;
+    }
+
+    .attr-name {
+      font-family: var(--font-heading);
+      font-size: 7.5pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--color-red-dark);
+      letter-spacing: 0.8px;
+      margin-bottom: 4px;
+    }
+
+    .attr-die {
+      font-family: var(--font-heading);
+      font-size: 18pt;
+      font-weight: 900;
+      color: var(--color-header-bg);
+      line-height: 1.1;
+    }
+
+    /* ═══════════════════════════════════════════
+       ESTADÍSTICAS DERIVADAS
+       ═══════════════════════════════════════════ */
+    .derived-grid {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .derived-box {
+      text-align: center;
+      border: 2px solid var(--color-border);
+      border-radius: 4px;
+      padding: 6px 12px;
+      min-width: 85px;
+      background: var(--color-bg);
+    }
+
+    .derived-label {
+      font-family: var(--font-heading);
+      font-size: 7pt;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--color-ink-light);
+      letter-spacing: 0.5px;
+      margin-bottom: 2px;
+    }
+
+    .derived-value {
+      font-family: var(--font-heading);
+      font-size: 16pt;
+      font-weight: 700;
+      color: var(--color-red-dark);
+      line-height: 1.2;
+    }
+
+    .derived-detail {
+      font-size: 7pt;
+      color: var(--color-ink-light);
+      font-style: italic;
+    }
+
+    /* ═══════════════════════════════════════════
+       TRACKERS (Bennies, Heridas, Fatiga)
+       ═══════════════════════════════════════════ */
+    .tracker-row {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+
+    .tracker {
+      text-align: center;
+    }
+
+    .tracker-label {
+      font-family: var(--font-heading);
+      font-size: 7.5pt;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--color-ink-light);
+      letter-spacing: 0.5px;
+      margin-bottom: 3px;
+    }
+
+    .tracker-pips {
+      display: flex;
+      gap: 4px;
+      justify-content: center;
+    }
+
+    .pip {
+      width: 16px;
+      height: 16px;
+      border: 2px solid var(--color-border);
+      border-radius: 50%;
+      background: var(--color-parchment);
+    }
+
+    .pip.filled {
+      background: var(--color-red);
+      border-color: var(--color-red-dark);
+    }
+
+    .pip.gold {
+      border-color: var(--color-gold-dark);
+    }
+
+    .pip.gold.filled {
+      background: var(--color-gold);
+      border-color: var(--color-gold-dark);
+    }
+
+    /* ═══════════════════════════════════════════
+       TABLAS
+       ═══════════════════════════════════════════ */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9pt;
+    }
+
+    table thead th {
+      background: var(--color-accent);
+      color: var(--color-gold-light);
+      font-family: var(--font-heading);
+      font-size: 7.5pt;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      padding: 5px 8px;
+      text-align: left;
+      border-bottom: 2px solid var(--color-gold-dark);
+    }
+
+    table tbody td {
+      padding: 4px 8px;
+      border-bottom: 1px solid rgba(107, 58, 42, 0.15);
+      vertical-align: top;
+    }
+
+    table tbody tr:nth-child(even) {
+      background: var(--color-table-alt);
+    }
+
+    table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    td.die-cell {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      color: var(--color-red-dark);
+      font-size: 10pt;
+      text-align: center;
+      min-width: 50px;
+    }
+
+    td.name-cell {
+      font-weight: 600;
+      color: var(--color-header-bg);
+    }
+
+    td.attr-cell {
+      font-size: 8pt;
+      color: var(--color-ink-light);
+      font-style: italic;
+    }
+
+    /* ═══════════════════════════════════════════
+       TAGS Y BADGES
+       ═══════════════════════════════════════════ */
+    .badge {
+      display: inline-block;
+      padding: 1px 8px;
+      border-radius: 10px;
+      font-family: var(--font-heading);
+      font-size: 7pt;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .badge-major {
+      background: var(--color-red);
+      color: #fff;
+    }
+
+    .badge-minor {
+      background: var(--color-gold);
+      color: var(--color-header-bg);
+    }
+
+    .badge-equipped {
+      background: rgba(34, 120, 50, 0.15);
+      color: #1a5c28;
+      border: 1px solid rgba(34, 120, 50, 0.3);
+    }
+
+    .badge-core {
+      background: rgba(139, 26, 26, 0.12);
+      color: var(--color-red-dark);
+      border: 1px solid rgba(139, 26, 26, 0.25);
+      font-size: 6.5pt;
+      padding: 0 5px;
+      margin-left: 4px;
+    }
+
+    /* ═══════════════════════════════════════════
+       ITEMS (edges, hindrances, abilities)
+       ═══════════════════════════════════════════ */
+    .trait-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .trait-item {
+      padding: 4px 0;
+      border-bottom: 1px dotted rgba(107, 58, 42, 0.2);
+    }
+
+    .trait-item:last-child {
+      border-bottom: none;
+    }
+
+    .trait-name {
+      font-family: var(--font-heading);
+      font-size: 9.5pt;
+      font-weight: 700;
+      color: var(--color-header-bg);
+    }
+
+    .trait-desc {
+      font-size: 8.5pt;
+      color: var(--color-ink-light);
+      font-style: italic;
+      margin-top: 2px;
+      line-height: 1.45;
+      max-height: 3.5em;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* ═══════════════════════════════════════════
+       PODERES / MAGIA
+       ═══════════════════════════════════════════ */
+    .power-card {
+      border: 1px solid var(--color-gold-dark);
+      border-radius: 4px;
+      padding: 8px 10px;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, var(--color-parchment) 0%, var(--color-bg) 100%);
+      page-break-inside: avoid;
+    }
+
+    .power-card:last-child {
+      margin-bottom: 0;
+    }
+
+    .power-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 3px;
+    }
+
+    .power-name {
+      font-family: var(--font-heading);
+      font-size: 10pt;
+      font-weight: 700;
+      color: var(--color-red-dark);
+    }
+
+    .power-cost {
+      font-family: var(--font-heading);
+      font-size: 9pt;
+      font-weight: 600;
+      color: var(--color-gold-dark);
+    }
+
+    .power-meta {
+      display: flex;
+      gap: 12px;
+      font-size: 8pt;
+      color: var(--color-ink-light);
+      margin-bottom: 3px;
+      flex-wrap: wrap;
+    }
+
+    .power-meta span {
+      white-space: nowrap;
+    }
+
+    .power-meta strong {
+      color: var(--color-ink);
+      font-weight: 600;
+    }
+
+    .power-desc {
+      font-size: 8.5pt;
+      color: var(--color-ink);
+      line-height: 1.55;
+      text-align: justify;
+      margin-top: 2px;
+      padding: 3px 0;
+    }
+
+    .power-trapping {
+      font-size: 7.5pt;
+      color: var(--color-gold-dark);
+      font-style: italic;
+      margin-top: 2px;
+    }
+
+    /* ═══════════════════════════════════════════
+       MONEDA / RIQUEZA
+       ═══════════════════════════════════════════ */
+    .wealth-box {
+      text-align: center;
+      padding: 6px;
+      background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-dark) 100%);
+      color: var(--color-header-bg);
+      border-radius: 4px;
+      margin-top: 6px;
+    }
+
+    .wealth-label {
+      font-family: var(--font-heading);
+      font-size: 7pt;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .wealth-value {
+      font-family: var(--font-heading);
+      font-size: 14pt;
+      font-weight: 900;
+    }
+
+    /* ═══════════════════════════════════════════
+       BIOGRAFÍA
+       ═══════════════════════════════════════════ */
+    .bio-text {
+      font-size: 9pt;
+      line-height: 1.65;
+      color: var(--color-ink-light);
+      font-style: italic;
+      text-align: justify;
+      text-indent: 1.5em;
+      margin-top: 4px;
+    }
+
+    /* ═══════════════════════════════════════════
+       DECORACIÓN ORNAMENTAL
+       ═══════════════════════════════════════════ */
+    .ornament {
+      text-align: center;
+      color: var(--color-gold-dark);
+      font-size: 10pt;
+      letter-spacing: 6px;
+      margin: 6px 0;
+      opacity: 0.5;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid var(--color-gold);
+      margin: 10px 0;
+      opacity: 0.4;
+    }
+
+    /* ═══════════════════════════════════════════
+       ENCUMBRANCE BAR
+       ═══════════════════════════════════════════ */
+    .enc-bar-wrapper {
+      margin-top: 6px;
+    }
+
+    .enc-bar-track {
+      width: 100%;
+      height: 12px;
+      background: var(--color-bg-dark);
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .enc-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--color-gold), var(--color-gold-dark));
+      border-radius: 6px;
+      transition: width 0.3s;
+    }
+
+    .enc-bar-text {
+      text-align: center;
+      font-family: var(--font-heading);
+      font-size: 7.5pt;
+      color: var(--color-ink-light);
+      margin-top: 2px;
+    }
+
+    /* ═══════════════════════════════════════════
+       FOOTER
+       ═══════════════════════════════════════════ */
+    .sheet-footer {
+      text-align: center;
+      font-family: var(--font-heading);
+      font-size: 7pt;
+      color: var(--color-ink-light);
+      letter-spacing: 1px;
+      margin-top: 10px;
+      opacity: 0.6;
+    }
+  </style>
+</head>
+<body>
+
+  {# ═══════════════════════════════════════════
+     CABECERA DEL PERSONAJE
+     ═══════════════════════════════════════════ #}
+  <div class="sheet-header">
+    {% if info.img_local %}
+    <div class="header-with-portrait">
+      <div class="character-portrait">
+        <img src="file://{{ info.img_local }}" alt="{{ info.name }}">
+      </div>
+      <div class="character-info">
+        <div class="character-name">{{ info.name }}</div>
+        <div class="character-subtitle">
+          {% if info.species %}{{ info.species }}{% endif %}
+          {% if info.species and info.archetype %}<span class="sep">·</span>{% endif %}
+          {% if info.archetype %}{{ info.archetype }}{% endif %}
+        </div>
+      </div>
+    </div>
+    {% else %}
+    <div class="character-name">{{ info.name }}</div>
+    <div class="character-subtitle">
+      {% if info.species %}{{ info.species }}{% endif %}
+      {% if info.species and info.archetype %}<span class="sep">·</span>{% endif %}
+      {% if info.archetype %}{{ info.archetype }}{% endif %}
+    </div>
+    {% endif %}
+  </div>
+
+  {# ═══════════════════════════════════════════
+     BARRA DE INFO RÁPIDA
+     ═══════════════════════════════════════════ #}
+  <div class="info-bar">
+    {% if info.rank %}
+    <span class="info-pill"><span class="label">Rango:</span>{{ info.rank }}</span>
+    {% endif %}
+    {% if info.advances %}
+    <span class="info-pill"><span class="label">Avances:</span>{{ info.advances }}</span>
+    {% endif %}
+    {% if info.species %}
+    <span class="info-pill"><span class="label">Linaje:</span>{{ info.species }}</span>
+    {% endif %}
+  </div>
+
+  <div class="ornament">⚜ ✦ ⚜</div>
+
+  {# ═══════════════════════════════════════════
+     ATRIBUTOS
+     ═══════════════════════════════════════════ #}
+  <div class="section">
+    <div class="section-title"><span class="icon">⚔</span>Atributos</div>
+    <div class="section-body">
+      <div class="attributes-grid">
+        {% for attr in attributes %}
+        <div class="attr-card">
+          <div class="attr-name">{{ attr.name }}</div>
+          <div class="attr-die">{{ attr.die }}</div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  {# ═══════════════════════════════════════════
+     ESTADÍSTICAS DERIVADAS + TRACKERS
+     ═══════════════════════════════════════════ #}
+  <div class="section">
+    <div class="section-title"><span class="icon">🛡</span>Estadísticas Derivadas</div>
+    <div class="section-body">
+      <div class="derived-grid">
+        <div class="derived-box">
+          <div class="derived-label">Paso</div>
+          <div class="derived-value">{{ derived.speed }}</div>
+          <div class="derived-detail">Carrera {{ derived.running_die }}</div>
+        </div>
+        <div class="derived-box">
+          <div class="derived-label">Parada</div>
+          <div class="derived-value">{{ derived.parry }}</div>
+          {% if derived.parry_modifier != 0 or derived.parry_shield != 0 %}
+          <div class="derived-detail">
+            {% if derived.parry_shield != 0 %}(+{{ derived.parry_shield }} escudo){% endif %}
+            {% if derived.parry_modifier != 0 %}({% if derived.parry_modifier > 0 %}+{% endif %}{{ derived.parry_modifier }} bonus){% endif %}
+          </div>
+          {% endif %}
+        </div>
+        <div class="derived-box">
+          <div class="derived-label">Dureza</div>
+          <div class="derived-value">{{ derived.toughness }}</div>
+          <div class="derived-detail">{{ derived.toughness_base }} + {{ derived.toughness_armor }} armadura</div>
+        </div>
+        <div class="derived-box">
+          <div class="derived-label">Tamaño</div>
+          <div class="derived-value">{{ derived.size }}</div>
+        </div>
+      </div>
+
+      {# Trackers visuales #}
+      <div class="tracker-row">
+        <div class="tracker">
+          <div class="tracker-label">Benis ({{ derived.bennies_current }}/{{ derived.bennies_max }})</div>
+          <div class="tracker-pips">
+            {% for i in range(derived.bennies_max) %}
+            <div class="pip gold{% if i < derived.bennies_current %} filled{% endif %}"></div>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="tracker">
+          <div class="tracker-label">Heridas ({{ derived.wounds_current }}/{{ derived.wounds_max }})</div>
+          <div class="tracker-pips">
+            {% for i in range(derived.wounds_max) %}
+            <div class="pip{% if i < derived.wounds_current %} filled{% endif %}"></div>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="tracker">
+          <div class="tracker-label">Fatiga ({{ derived.fatigue_current }}/{{ derived.fatigue_max }})</div>
+          <div class="tracker-pips">
+            {% for i in range(derived.fatigue_max) %}
+            <div class="pip{% if i < derived.fatigue_current %} filled{% endif %}"></div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      {# Barra de carga #}
+      {% if derived.encumbrance_max > 0 %}
+      <div class="enc-bar-wrapper">
+        <div class="enc-bar-track">
+          {% set enc_pct = (derived.encumbrance_current / derived.encumbrance_max * 100) | round | int %}
+          <div class="enc-bar-fill" style="width: {{ enc_pct if enc_pct <= 100 else 100 }}%;"></div>
+        </div>
+        <div class="enc-bar-text">
+          Carga: {{ derived.encumbrance_current }} / {{ derived.encumbrance_max }}
+          ({{ enc_pct }}%)
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  {# ═══════════════════════════════════════════
+     FILA: HABILIDADES + RASGOS
+     ═══════════════════════════════════════════ #}
+  <div class="row">
+    {# HABILIDADES #}
+    <div class="col-2">
+      <div class="section">
+        <div class="section-title"><span class="icon">📜</span>Habilidades</div>
+        <div class="section-body">
+          <table>
+            <thead>
+              <tr>
+                <th>Habilidad</th>
+                <th>Atributo</th>
+                <th style="text-align:center;">Dado</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for skill in skills %}
+              <tr>
+                <td class="name-cell">
+                  {{ skill.name }}
+                  {% if skill.is_core %}<span class="badge badge-core">Core</span>{% endif %}
+                </td>
+                <td class="attr-cell">{{ skill.attribute }}</td>
+                <td class="die-cell">{{ skill.die }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    {# VENTAJAS, COMPLICACIONES, CAPACIDADES #}
+    <div class="col-2">
+      {# Ventajas #}
+      {% if edges %}
+      <div class="section">
+        <div class="section-title"><span class="icon">⭐</span>Ventajas</div>
+        <div class="section-body">
+          <ul class="trait-list">
+            {% for edge in edges %}
+            <li class="trait-item">
+              <span class="trait-name">{{ edge.name }}</span>
+              {% if edge.description %}
+              <div class="trait-desc">{{ edge.description }}</div>
+              {% endif %}
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+      {% endif %}
+
+      {# Complicaciones #}
+      {% if hindrances %}
+      <div class="section">
+        <div class="section-title"><span class="icon">⚠</span>Complicaciones</div>
+        <div class="section-body">
+          <ul class="trait-list">
+            {% for hind in hindrances %}
+            <li class="trait-item">
+              <span class="trait-name">{{ hind.name }}</span>
+              <span class="badge {% if hind.severity == 'Mayor' %}badge-major{% else %}badge-minor{% endif %}">
+                {{ hind.severity }}
+              </span>
+              {% if hind.description %}
+              <div class="trait-desc">{{ hind.description }}</div>
+              {% endif %}
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+      {% endif %}
+
+      {# Capacidades Raciales/Especiales #}
+      {% if abilities %}
+      <div class="section">
+        <div class="section-title"><span class="icon">🔮</span>Capacidades Especiales</div>
+        <div class="section-body">
+          <ul class="trait-list">
+            {% for ab in abilities %}
+            <li class="trait-item">
+              <span class="trait-name">{{ ab.name }}</span>
+              {% if ab.description %}
+              <div class="trait-desc">{{ ab.description }}</div>
+              {% endif %}
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="ornament">— ✦ —</div>
+
+  {# ═══════════════════════════════════════════
+     COMBATE: ARMAS
+     ═══════════════════════════════════════════ #}
+  {% if weapons %}
+  <div class="section">
+    <div class="section-title"><span class="icon">⚔</span>Armas</div>
+    <div class="section-body">
+      <table>
+        <thead>
+          <tr>
+            <th>Arma</th>
+            <th>Daño</th>
+            <th style="text-align:center;">PA</th>
+            <th>Alcance</th>
+            <th>Cadencia</th>
+            <th style="text-align:center;">FUE Mín.</th>
+            <th style="text-align:center;">Peso</th>
+            <th>Notas</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for w in weapons %}
+          <tr>
+            <td class="name-cell">
+              {{ w.name }}
+              {% if w.quantity > 1 %} (×{{ w.quantity }}){% endif %}
+            </td>
+            <td class="die-cell">{{ w.damage }}</td>
+            <td style="text-align:center;">{{ w.ap }}</td>
+            <td>{{ w.range if w.range else "C.a.C." }}</td>
+            <td style="text-align:center;">{{ w.rof }}</td>
+            <td style="text-align:center;">{{ w.min_str }}</td>
+            <td style="text-align:center;">{{ w.weight }}</td>
+            <td>{{ w.notes }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% endif %}
+
+  {# ═══════════════════════════════════════════
+     COMBATE: ARMADURAS Y ESCUDOS
+     ═══════════════════════════════════════════ #}
+  <div class="row">
+    {% if armor %}
+    <div class="{% if shields %}col-2{% else %}col-full{% endif %}">
+      <div class="section">
+        <div class="section-title"><span class="icon">🛡</span>Armaduras</div>
+        <div class="section-body">
+          <table>
+            <thead>
+              <tr>
+                <th>Armadura</th>
+                <th style="text-align:center;">Valor</th>
+                <th>Cobertura</th>
+                <th style="text-align:center;">FUE Mín.</th>
+                <th style="text-align:center;">Peso</th>
+                <th>Notas</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for a in armor %}
+              <tr>
+                <td class="name-cell">{{ a.name }}</td>
+                <td class="die-cell">{{ a.armor }}</td>
+                <td>{{ a.locations }}</td>
+                <td style="text-align:center;">{{ a.min_str }}</td>
+                <td style="text-align:center;">{{ a.weight }}</td>
+                <td>{{ a.notes }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    {% if shields %}
+    <div class="{% if armor %}col-2{% else %}col-full{% endif %}">
+      <div class="section">
+        <div class="section-title"><span class="icon">🔰</span>Escudos</div>
+        <div class="section-body">
+          <table>
+            <thead>
+              <tr>
+                <th>Escudo</th>
+                <th style="text-align:center;">Parada</th>
+                <th style="text-align:center;">Armadura</th>
+                <th style="text-align:center;">FUE Mín.</th>
+                <th style="text-align:center;">Peso</th>
+                <th>Notas</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for s in shields %}
+              <tr>
+                <td class="name-cell">{{ s.name }}</td>
+                <td class="die-cell">+{{ s.parry }}</td>
+                <td style="text-align:center;">{{ s.armor }}</td>
+                <td style="text-align:center;">{{ s.min_str }}</td>
+                <td style="text-align:center;">{{ s.weight }}</td>
+                <td>{{ s.notes }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+
+  {# ═══════════════════════════════════════════
+     EQUIPO GENERAL
+     ═══════════════════════════════════════════ #}
+  {% if gear %}
+  <div class="section">
+    <div class="section-title"><span class="icon">🎒</span>Equipo</div>
+    <div class="section-body">
+      <table>
+        <thead>
+          <tr>
+            <th>Objeto</th>
+            <th style="text-align:center;">Cant.</th>
+            <th style="text-align:center;">Peso</th>
+            <th style="text-align:center;">Precio</th>
+            <th>Descripción</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for g in gear %}
+          <tr>
+            <td class="name-cell">{{ g.name }}</td>
+            <td style="text-align:center;">{{ g.quantity }}</td>
+            <td style="text-align:center;">{{ g.weight }}</td>
+            <td style="text-align:center;">{{ g.price }}</td>
+            <td>{{ g.description }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      {% if derived.currency > 0 %}
+      <div class="wealth-box">
+        <div class="wealth-label">Riqueza Total</div>
+        <div class="wealth-value">{{ derived.currency }} mo</div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
+
+  {# ═══════════════════════════════════════════
+     MAGIA / PODERES
+     ═══════════════════════════════════════════ #}
+  {% if magic.has_powers %}
+  <div class="section">
+    <div class="section-title"><span class="icon">✨</span>Poderes Arcanos</div>
+    <div class="section-body">
+      {# Encabezado de magia #}
+      <div class="derived-grid" style="margin-bottom: 10px;">
+        {% if magic.arcane_background %}
+        <div class="derived-box">
+          <div class="derived-label">Trasfondo Arcano</div>
+          <div class="derived-value" style="font-size: 9pt;">{{ magic.arcane_background }}</div>
+        </div>
+        {% endif %}
+        <div class="derived-box">
+          <div class="derived-label">Puntos de Poder (Total)</div>
+          <div class="derived-value">{{ magic.power_points.current }} / {{ magic.power_points.max }}</div>
+        </div>
+        {% if magic.power_points.pools | length > 1 %}
+        {% for pool in magic.power_points.pools %}
+        <div class="derived-box">
+          <div class="derived-label">{{ pool.name }}</div>
+          <div class="derived-value" style="font-size: 12pt;">{{ pool.current }} / {{ pool.max }}</div>
+        </div>
+        {% endfor %}
+        {% endif %}
+      </div>
+
+      {# Lista de poderes #}
+      {% for power in magic.powers %}
+      <div class="power-card">
+        <div class="power-header">
+          <span class="power-name">{{ power.name }}</span>
+          <span class="power-cost">PP: {{ power.pp }}</span>
+        </div>
+        <div class="power-meta">
+          <span><strong>Alcance:</strong> {{ power.range }}</span>
+          <span><strong>Duración:</strong> {{ power.duration }}</span>
+          {% if power.damage %}
+          <span><strong>Daño:</strong> {{ power.damage }}</span>
+          {% endif %}
+          {% if power.rank %}
+          <span><strong>Rango:</strong> {{ power.rank }}</span>
+          {% endif %}
+        </div>
+        {% if power.description %}
+        <div class="power-desc">{{ power.description }}</div>
+        {% endif %}
+        {% if power.trapping %}
+        <div class="power-trapping">🎭 {{ power.trapping }}</div>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  {# ═══════════════════════════════════════════
+     BIOGRAFÍA Y APARIENCIA
+     ═══════════════════════════════════════════ #}
+  {% if info.biography or info.appearance %}
+  <div class="section">
+    <div class="section-title"><span class="icon">📖</span>Trasfondo</div>
+    <div class="section-body">
+      {% if info.appearance %}
+      <div style="margin-bottom: 6px;">
+        <strong style="font-family: var(--font-heading); font-size: 8pt; text-transform: uppercase; letter-spacing: 0.5px; color: var(--color-red-dark);">
+          Apariencia
+        </strong>
+        <div class="bio-text">{{ info.appearance }}</div>
+      </div>
+      {% endif %}
+
+      {% if info.biography %}
+      <div>
+        <strong style="font-family: var(--font-heading); font-size: 8pt; text-transform: uppercase; letter-spacing: 0.5px; color: var(--color-red-dark);">
+          Biografía
+        </strong>
+        <div class="bio-text">{{ info.biography }}</div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="ornament">⚜ ✦ ✦ ✦ ⚜</div>
+
+  <div class="sheet-footer">
+    Savage Worlds Adventure Edition — Generado con SWADE Character Exporter
+  </div>
+
+</body>
+</html>
