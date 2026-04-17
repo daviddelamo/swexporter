@@ -859,26 +859,8 @@
       </div>
     </div>
 
-    {# VENTAJAS, COMPLICACIONES, CAPACIDADES #}
+    {# COMPLICACIONES, CAPACIDADES #}
     <div class="col-2">
-      {# Ventajas #}
-      {% if edges %}
-      <div class="section">
-        <div class="section-title"><span class="icon">⭐</span>Ventajas</div>
-        <div class="section-body">
-          <ul class="trait-list">
-            {% for edge in edges %}
-            <li class="trait-item">
-              <span class="trait-name">{{ edge.name }}</span>
-              {% if edge.description %}
-              <div class="trait-desc">{{ edge.description }}</div>
-              {% endif %}
-            </li>
-            {% endfor %}
-          </ul>
-        </div>
-      </div>
-      {% endif %}
 
       {# Complicaciones #}
       {% if hindrances %}
@@ -922,6 +904,26 @@
       {% endif %}
     </div>
   </div>
+
+  {# VENTAJAS (En su propia página o a ancho completo si abarcan múltiples páginas) #}
+  {% if edges %}
+  <div style="page-break-before: always;"></div>
+  <div class="section">
+    <div class="section-title"><span class="icon">⭐</span>Ventajas</div>
+    <div class="section-body">
+      <ul class="trait-list">
+        {% for edge in edges %}
+        <li class="trait-item">
+          <span class="trait-name">{{ edge.name }}</span>
+          {% if edge.description %}
+          <div class="trait-desc">{{ edge.description }}</div>
+          {% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  {% endif %}
 
   <div class="ornament">— ✦ —</div>
 
