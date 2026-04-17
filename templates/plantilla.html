@@ -966,75 +966,69 @@
   {# ═══════════════════════════════════════════
      COMBATE: ARMADURAS Y ESCUDOS
      ═══════════════════════════════════════════ #}
-  <div class="row">
-    {% if armor %}
-    <div class="col-full">
-      <div class="section">
-        <div class="section-title"><span class="icon">🛡</span>Armaduras</div>
-        <div class="section-body">
-          <table>
-            <thead>
-              <tr>
-                <th>Armadura</th>
-                <th style="text-align:center;">Valor</th>
-                <th>Cobertura</th>
-                <th style="text-align:center;">FUE Mín.</th>
-                <th style="text-align:center;">Peso</th>
-                <th>Notas</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for a in armor %}
-              <tr>
-                <td class="name-cell">{{ a.name }}</td>
-                <td class="die-cell">{{ a.armor }}</td>
-                <td>{{ a.locations }}</td>
-                <td style="text-align:center;">{{ a.min_str }}</td>
-                <td style="text-align:center;">{{ a.weight }}</td>
-                <td>{{ a.notes }}</td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-      </div>
+  {% if armor %}
+  <div class="section">
+    <div class="section-title"><span class="icon">🛡</span>Armaduras</div>
+    <div class="section-body">
+      <table>
+        <thead>
+          <tr>
+            <th>Armadura</th>
+            <th style="text-align:center;">Valor</th>
+            <th>Cobertura</th>
+            <th style="text-align:center;">FUE Mín.</th>
+            <th style="text-align:center;">Peso</th>
+            <th>Notas</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for a in armor %}
+          <tr>
+            <td class="name-cell">{{ a.name }}</td>
+            <td class="die-cell">{{ a.armor }}</td>
+            <td>{{ a.locations }}</td>
+            <td style="text-align:center;">{{ a.min_str }}</td>
+            <td style="text-align:center;">{{ a.weight }}</td>
+            <td>{{ a.notes }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
-    {% endif %}
-
-    {% if shields %}
-    <div class="col-full">
-      <div class="section">
-        <div class="section-title"><span class="icon">🔰</span>Escudos</div>
-        <div class="section-body">
-          <table>
-            <thead>
-              <tr>
-                <th>Escudo</th>
-                <th style="text-align:center;">Parada</th>
-                <th style="text-align:center;">Armadura</th>
-                <th style="text-align:center;">FUE Mín.</th>
-                <th style="text-align:center;">Peso</th>
-                <th>Notas</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for s in shields %}
-              <tr>
-                <td class="name-cell">{{ s.name }}</td>
-                <td class="die-cell">+{{ s.parry }}</td>
-                <td style="text-align:center;">{{ s.armor }}</td>
-                <td style="text-align:center;">{{ s.min_str }}</td>
-                <td style="text-align:center;">{{ s.weight }}</td>
-                <td>{{ s.notes }}</td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-    {% endif %}
   </div>
+  {% endif %}
+
+  {% if shields %}
+  <div class="section">
+    <div class="section-title"><span class="icon">🔰</span>Escudos</div>
+    <div class="section-body">
+      <table>
+        <thead>
+          <tr>
+            <th>Escudo</th>
+            <th style="text-align:center;">Parada</th>
+            <th style="text-align:center;">Armadura</th>
+            <th style="text-align:center;">FUE Mín.</th>
+            <th style="text-align:center;">Peso</th>
+            <th>Notas</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for s in shields %}
+          <tr>
+            <td class="name-cell">{{ s.name }}</td>
+            <td class="die-cell">+{{ s.parry }}</td>
+            <td style="text-align:center;">{{ s.armor }}</td>
+            <td style="text-align:center;">{{ s.min_str }}</td>
+            <td style="text-align:center;">{{ s.weight }}</td>
+            <td>{{ s.notes }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% endif %}
 
   {# ═══════════════════════════════════════════
      EQUIPO GENERAL
