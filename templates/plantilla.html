@@ -13,21 +13,21 @@
        VARIABLES & RESET
        ═══════════════════════════════════════════ */
     :root {
-      --color-bg: #f5edd6;
-      --color-bg-dark: #e8dbbf;
-      --color-parchment: #faf3e0;
-      --color-ink: #2c1810;
-      --color-ink-light: #5c3d2e;
-      --color-red: #8b1a1a;
-      --color-red-dark: #6b0f0f;
-      --color-gold: #c9a84c;
-      --color-gold-dark: #a07b28;
-      --color-gold-light: #e8d48b;
-      --color-border: #6b3a2a;
-      --color-accent: #4a2520;
-      --color-header-bg: #3d1c14;
-      --color-table-alt: #f0e4c8;
-      --color-tag-bg: rgba(139, 26, 26, 0.1);
+      --color-bg: #efe4cb;
+      --color-bg-dark: #dfcea5;
+      --color-parchment: #f9f1e0;
+      --color-ink: #301b12;
+      --color-ink-light: #5a3826;
+      --color-red: #9e1b1b;
+      --color-red-dark: #630c0c;
+      --color-gold: #d4af37;
+      --color-gold-dark: #997a00;
+      --color-gold-light: #f3e5ab;
+      --color-border: #8b5a33;
+      --color-accent: #4a1f14;
+      --color-header-bg: #38120c;
+      --color-table-alt: rgba(223, 206, 165, 0.3);
+      --color-tag-bg: rgba(158, 27, 27, 0.12);
       --font-title: 'Cinzel Decorative', 'Cinzel', serif;
       --font-heading: 'Cinzel', serif;
       --font-body: 'Crimson Text', 'IM Fell English', Georgia, serif;
@@ -46,6 +46,7 @@
     @page {
       size: A4;
       margin: 12mm 10mm 14mm 10mm;
+      background: radial-gradient(circle, #fcf6e8 0%, #e3ce9f 100%);
 
       @bottom-center {
         content: "— " counter(page) " —";
@@ -60,19 +61,20 @@
       font-size: 10pt;
       line-height: 1.45;
       color: var(--color-ink);
-      background: var(--color-parchment);
+      /* The background is handled by @page for the whole PDF */
     }
 
     /* ═══════════════════════════════════════════
        ENCABEZADO PRINCIPAL
        ═══════════════════════════════════════════ */
     .sheet-header {
-      background: linear-gradient(135deg, var(--color-header-bg) 0%, var(--color-red-dark) 50%, var(--color-header-bg) 100%);
+      background: linear-gradient(180deg, #6b1414 0%, #360606 100%);
       color: var(--color-gold);
-      padding: 16px 24px;
-      border: 3px solid var(--color-gold-dark);
-      border-radius: 4px;
-      margin-bottom: 12px;
+      padding: 18px 24px;
+      border: 4px solid var(--color-gold-dark);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3), inset 0 0 15px rgba(0,0,0,0.5);
+      border-radius: 6px;
+      margin-bottom: 15px;
       position: relative;
       text-align: center;
     }
@@ -98,7 +100,7 @@
       letter-spacing: 2px;
       text-transform: uppercase;
       color: var(--color-gold-light);
-      text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
       margin-bottom: 4px;
     }
 
@@ -180,21 +182,28 @@
        SECCIONES
        ═══════════════════════════════════════════ */
     .section {
-      border: 2px solid var(--color-border);
-      border-radius: 3px;
-      margin-bottom: 12px;
+      background: rgba(255, 255, 255, 0.5);
+      border: 1px solid rgba(139, 90, 51, 0.3);
+      box-shadow: 1px 2px 5px rgba(0,0,0,0.05), inset 0 0 20px rgba(223, 206, 165, 0.2);
+      border-radius: 5px;
+      margin-bottom: 15px;
     }
 
     .section-title {
-      background: linear-gradient(90deg, var(--color-header-bg), var(--color-red-dark));
-      color: var(--color-gold-light);
+      background: linear-gradient(180deg, #871919 0%, #540c0c 100%);
+      color: #fdf6e3;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
       font-family: var(--font-heading);
       font-size: 11pt;
       font-weight: 700;
-      padding: 6px 14px;
+      padding: 8px 14px;
       letter-spacing: 1.5px;
       text-transform: uppercase;
-      border-bottom: 2px solid var(--color-gold-dark);
+      text-align: center;
+      border-bottom: 3px solid var(--color-gold-dark);
+      border-top-left-radius: 4px;
+      border-top-right-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
       position: relative;
       page-break-after: avoid;
     }
@@ -216,8 +225,8 @@
     }
 
     .section-body {
-      padding: 10px 14px;
-      background: var(--color-parchment);
+      padding: 12px 16px;
+      background: transparent;
     }
 
     /* ═══════════════════════════════════════════
