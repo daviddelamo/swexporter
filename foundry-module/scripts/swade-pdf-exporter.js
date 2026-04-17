@@ -8,6 +8,7 @@
 
 const MODULE_ID = "swade-pdf-exporter";
 let _debugHooksEnabled = false;
+let _isGeneratingPDF = false;
 
 // ─────────────────────────────────────────────────
 // Module Initialization
@@ -52,7 +53,7 @@ function addHeaderButton(sheet, buttons) {
     label: game.i18n.localize("SWADE_PDF.ExportPDF"),
     class: "swade-pdf-export-header",
     icon: "fas fa-file-pdf",
-    onclick: () => exportCharacterPDF(sheet.actor),
+    onclick: (ev) => exportCharacterPDF(sheet.actor, ev ? ev.currentTarget : null),
   });
 }
 
@@ -94,7 +95,7 @@ function injectDOMButton(app, html, data) {
   $btn.on("click", (ev) => {
     ev.preventDefault();
     ev.stopPropagation();
-    exportCharacterPDF(app.actor);
+    exportCharacterPDF(app.actor, ev.currentTarget);
   });
 
   // Try multiple injection points
@@ -187,12 +188,28 @@ async function fetchPortraitBase64(imgPath) {
   }
 }
 
-async function exportCharacterPDF(actor) {
+async function exportCharacterPDF(actor, btnElement = null) {
+  if (_isGeneratingPDF) {
+    ui.notifications.warn("Por favor espera, la hoja ya se está generando...");
+    return;
+  }
+
   const apiUrl = game.settings.get(MODULE_ID, "apiUrl");
 
   if (!apiUrl) {
     ui.notifications.error(game.i18n.localize("SWADE_PDF.ErrorConnection"));
     return;
+  }
+
+  _isGeneratingPDF = true;
+  let originalContent = null;
+  const $btn = btnElement ? $(btnElement) : null;
+
+  if ($btn && $btn.length) {
+    originalContent = $btn.html();
+    $btn.html(`<i class="fas fa-spinner fa-spin"></i> Generando...`);
+    $btn.css("pointer-events", "none");
+    $btn.css("opacity", "0.7");
   }
 
   ui.notifications.info(game.i18n.localize("SWADE_PDF.Generating"));
@@ -246,5 +263,12 @@ async function exportCharacterPDF(actor) {
   } catch (err) {
     console.error(`${MODULE_ID} | Export error:`, err);
     ui.notifications.error(`${game.i18n.localize("SWADE_PDF.Error")}: ${err.message}`);
+  } finally {
+    _isGeneratingPDF = false;
+    if ($btn && $btn.length && originalContent) {
+      $btn.html(originalContent);
+      $btn.css("pointer-events", "auto");
+      $btn.css("opacity", "1");
+    }
   }
 }

@@ -1,6 +1,6 @@
 import os
 import logging
-from google import genai
+from openai import OpenAI
 
 logger = logging.getLogger(__name__)
 
@@ -25,7 +25,7 @@ Responde ÚNICAMENTE con la traducción directa. No añadas notas, explicaciones
 
 def translate_to_spanish(text: str) -> str:
     """
-    Traduce un texto al español usando Gemini API con contexto de Savage Pathfinder.
+    Traduce un texto al español usando Grok API (xAI) con contexto de Savage Pathfinder.
     Utiliza un caché en memoria para mejorar el rendimiento.
     """
     if not text or not isinstance(text, str) or not text.strip():
@@ -36,28 +36,31 @@ def translate_to_spanish(text: str) -> str:
     if text in _translation_cache:
         return _translation_cache[text]
         
-    api_key = os.environ.get("GEMINI_API_KEY")
+    api_key = os.environ.get("XAI_API_KEY")
     if not api_key:
-        logger.warning("No se encontró GEMINI_API_KEY en las variables de entorno. Devolviendo texto original.")
+        logger.warning("No se encontró XAI_API_KEY en las variables de entorno. Devolviendo texto original.")
         return text
 
     try:
-        client = genai.Client()
-        response = client.models.generate_content(
-            model='gemini-2.5-flash',
-            contents=text,
-            config=genai.types.GenerateContentConfig(
-                system_instruction=SYSTEM_INSTRUCTION,
-                temperature=0.1
-            ),
+        client = OpenAI(
+            api_key=api_key,
+            base_url="https://api.x.ai/v1",
         )
-        translated = response.text.strip()
+        response = client.chat.completions.create(
+            model="grok-2-latest",
+            messages=[
+                {"role": "system", "content": SYSTEM_INSTRUCTION},
+                {"role": "user", "content": text},
+            ],
+            temperature=0.1
+        )
+        translated = response.choices[0].message.content.strip()
         if translated:
             _translation_cache[text] = translated
             return translated
         return text
     except Exception as e:
-        logger.error(f"Error durante la traducción con Gemini: {e}")
+        logger.error(f"Error durante la traducción con Grok: {e}")
         return text
 
 def translate_field(data_dict: dict, field_name: str):
