@@ -1,6 +1,8 @@
 services:
   swade-pdf-exporter:
     build: .
+    ports:
+      - '3131:3131'
     environment:
       # Puerto interno del contenedor
       - PORT=3131
@@ -11,7 +13,7 @@ services:
       - CORS_ORIGINS=*
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:3131/health')\""]
+      test: [ "CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:3131/health')\"" ]
       interval: 30s
       timeout: 10s
       retries: 3
