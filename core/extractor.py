@@ -11,6 +11,8 @@ Usado por:
 
 import re
 
+from core.translator import translate_to_spanish
+
 # ─────────────────────────────────────────────────
 # Constantes y mapeo de nombres de atributos
 # ─────────────────────────────────────────────────
@@ -183,8 +185,8 @@ def extract_basic_info(data: dict) -> dict:
         "name": name,
         "species": species_name,
         "archetype": archetype,
-        "biography": biography,
-        "appearance": appearance,
+        "biography": translate_to_spanish(biography),
+        "appearance": translate_to_spanish(appearance),
         "rank": rank,
         "advances": advances_total,
         "img": data.get("img", ""),
@@ -324,7 +326,7 @@ def extract_edges(data: dict) -> list:
             desc = strip_html(sys.get("description", ""))
             edges.append({
                 "name": item.get("name", ""),
-                "description": desc,
+                "description": translate_to_spanish(desc),
                 "rank": sys.get("rank", ""),
                 "is_racial": sys.get("isRacial", False),
             })
@@ -343,7 +345,7 @@ def extract_hindrances(data: dict) -> list:
             desc = strip_html(sys.get("description", ""))
             hindrances.append({
                 "name": item.get("name", ""),
-                "description": desc,
+                "description": translate_to_spanish(desc),
                 "severity": "Mayor" if is_major else "Menor",
             })
     hindrances.sort(key=lambda h: (h["severity"], h["name"]))
@@ -360,7 +362,7 @@ def extract_abilities(data: dict) -> list:
             desc = strip_html(sys.get("description", ""))
             abilities.append({
                 "name": item.get("name", ""),
-                "description": desc,
+                "description": translate_to_spanish(desc),
             })
     abilities.sort(key=lambda a: a["name"])
     return abilities
@@ -380,7 +382,7 @@ def extract_weapons(data: dict) -> list:
                 "ap": sys.get("ap", 0),
                 "range": sys.get("range", "Cuerpo a cuerpo"),
                 "rof": sys.get("rof", "1"),
-                "notes": sys.get("notes", ""),
+                "notes": translate_to_spanish(sys.get("notes", "")),
                 "weight": sys.get("weight", 0),
                 "price": sys.get("price", 0),
                 "quantity": sys.get("quantity", 1),
@@ -413,7 +415,7 @@ def extract_armor(data: dict) -> list:
             armor_list.append({
                 "name": item.get("name", ""),
                 "armor": sys.get("armor", 0),
-                "notes": sys.get("notes", ""),
+                "notes": translate_to_spanish(sys.get("notes", "")),
                 "weight": sys.get("weight", 0),
                 "price": sys.get("price", 0),
                 "min_str": sys.get("minStr", "—"),
@@ -437,7 +439,7 @@ def extract_shields(data: dict) -> list:
                 "parry": sys.get("parry", 0),
                 "cover": sys.get("cover", 0),
                 "armor": sys.get("armor", 0),
-                "notes": sys.get("notes", ""),
+                "notes": translate_to_spanish(sys.get("notes", "")),
                 "weight": sys.get("weight", 0),
                 "price": sys.get("price", 0),
                 "min_str": sys.get("minStr", "—"),
@@ -458,7 +460,7 @@ def extract_gear(data: dict) -> list:
             desc = strip_html(sys.get("description", ""))
             gear.append({
                 "name": item.get("name", ""),
-                "description": desc,
+                "description": translate_to_spanish(desc),
                 "weight": sys.get("weight", 0),
                 "price": sys.get("price", 0),
                 "quantity": sys.get("quantity", 1),
@@ -520,9 +522,9 @@ def extract_powers(data: dict) -> dict:
                 "pp": sys.get("pp", "—"),
                 "range": sys.get("range", "—"),
                 "duration": sys.get("duration", "—"),
-                "trapping": sys.get("trapping", ""),
+                "trapping": translate_to_spanish(sys.get("trapping", "")),
                 "damage": sys.get("damage", ""),
-                "description": desc,
+                "description": translate_to_spanish(desc),
                 "rank": sys.get("rank", ""),
                 "skill": skill,
                 "arcane": sys.get("arcane", ""),

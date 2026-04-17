@@ -2,3 +2,4 @@ Jinja2
 WeasyPrint
 fastapi
 uvicorn[standard]
+deep-translator
