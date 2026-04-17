@@ -183,8 +183,6 @@
       border: 2px solid var(--color-border);
       border-radius: 3px;
       margin-bottom: 12px;
-      overflow: hidden;
-      page-break-inside: avoid;
     }
 
     .section-title {
@@ -198,6 +196,7 @@
       text-transform: uppercase;
       border-bottom: 2px solid var(--color-gold-dark);
       position: relative;
+      page-break-after: avoid;
     }
 
     .section-title::after {
@@ -407,6 +406,10 @@
       vertical-align: top;
     }
 
+    table tbody tr {
+      page-break-inside: avoid;
+    }
+
     table tbody tr:nth-child(even) {
       background: var(--color-table-alt);
     }
@@ -485,6 +488,7 @@
     .trait-item {
       padding: 4px 0;
       border-bottom: 1px dotted rgba(107, 58, 42, 0.2);
+      page-break-inside: avoid;
     }
 
     .trait-item:last-child {
