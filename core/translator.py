@@ -24,6 +24,8 @@ Responde ÚNICAMENTE con la traducción directa. No añadas notas, explicaciones
 """
 
 def translate_to_spanish(text: str) -> str:
+
+    return text
     """
     Traduce un texto al español usando Grok API (xAI) con contexto de Savage Pathfinder.
     Utiliza un caché en memoria para mejorar el rendimiento.
