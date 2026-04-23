@@ -10,14 +10,17 @@ Uso:
 
 import base64
 import io
+import json
 import os
 import re
 import tempfile
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException
+import qrcode
+
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse
+from fastapi.responses import StreamingResponse, HTMLResponse, Response
 from jinja2 import Environment, FileSystemLoader
 from pydantic import BaseModel
 from weasyprint import HTML
@@ -33,6 +36,8 @@ from core.extractor import build_context
 
 PROJECT_ROOT = Path(__file__).parent.parent.resolve()
 TEMPLATE_DIR = PROJECT_ROOT / "templates"
+DATA_DIR = PROJECT_ROOT / "data" / "characters"
+DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 app = FastAPI(
     title="SWADE PDF Exporter API",
@@ -57,6 +62,11 @@ app.add_middleware(
 # ─────────────────────────────────────────────────
 
 class GeneratePDFRequest(BaseModel):
+    actor_data: dict
+    img_base64: str | None = None
+
+class SyncCharacterRequest(BaseModel):
+    uuid: str
     actor_data: dict
     img_base64: str | None = None
 
@@ -145,3 +155,77 @@ async def generate_pdf(request: GeneratePDFRequest):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error generando PDF: {str(e)}")
+
+
+@app.post("/sync-character")
+async def sync_character(request: SyncCharacterRequest):
+    """
+    Sincroniza los datos de un personaje con el servidor.
+    Extrae la información y la guarda en disco.
+    """
+    try:
+        context = build_context(request.actor_data)
+        
+        # Para la web, guardamos la imagen en base64 directamente en el contexto
+        if request.img_base64:
+            # Asegurar que tiene el prefijo de data URI
+            if not request.img_base64.startswith("data:image"):
+                context["info"]["img_local"] = f"data:image/webp;base64,{request.img_base64}"
+            else:
+                context["info"]["img_local"] = request.img_base64
+        else:
+            context["info"]["img_local"] = ""
+            
+        file_path = DATA_DIR / f"{request.uuid}.json"
+        with open(file_path, "w", encoding="utf-8") as f:
+            json.dump(context, f, ensure_ascii=False, indent=2)
+            
+        return {"status": "success", "uuid": request.uuid}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error sincronizando personaje: {str(e)}")
+
+
+@app.get("/qr/{uuid}")
+async def get_qr(uuid: str, request: Request):
+    """Genera y devuelve el código QR apuntando a la URL del personaje."""
+    base_url = str(request.base_url).rstrip("/")
+    view_url = f"{base_url}/view/{uuid}"
+    
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        box_size=10,
+        border=4,
+    )
+    qr.add_data(view_url)
+    qr.make(fit=True)
+    
+    img = qr.make_image(fill_color="black", back_color="white")
+    
+    img_byte_arr = io.BytesIO()
+    img.save(img_byte_arr, format='PNG')
+    img_byte_arr = img_byte_arr.getvalue()
+    
+    return Response(content=img_byte_arr, media_type="image/png")
+
+
+@app.get("/view/{uuid}", response_class=HTMLResponse)
+async def view_character(uuid: str):
+    """Renderiza la hoja de personaje en la web usando los datos sincronizados."""
+    file_path = DATA_DIR / f"{uuid}.json"
+    
+    if not file_path.exists():
+        raise HTTPException(status_code=404, detail="Personaje no encontrado")
+        
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            context = json.load(f)
+            
+        env = Environment(loader=FileSystemLoader(str(TEMPLATE_DIR)))
+        # Intentará cargar web_view.html, si no existe todavía, lo haremos en el siguiente paso.
+        template = env.get_template("web_view.html")
+        html_content = template.render(**context)
+        
+        return HTMLResponse(content=html_content)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error renderizando la vista web: {str(e)}")

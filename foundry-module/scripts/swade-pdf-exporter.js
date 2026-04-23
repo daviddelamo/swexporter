@@ -55,6 +55,13 @@ function addHeaderButton(sheet, buttons) {
     icon: "fas fa-file-pdf",
     onclick: (ev) => exportCharacterPDF(sheet.actor, ev ? ev.currentTarget : null),
   });
+  
+  buttons.unshift({
+    label: "QR",
+    class: "swade-pdf-qr-header",
+    icon: "fas fa-qrcode",
+    onclick: (ev) => showQRDialog(sheet.actor),
+  });
 }
 
 // Standard Foundry hook
@@ -98,6 +105,17 @@ function injectDOMButton(app, html, data) {
     exportCharacterPDF(app.actor, ev.currentTarget);
   });
 
+  // Create QR button
+  const $qrBtn = $(`<a class="swade-pdf-qr-btn" title="QR Web View">
+    <i class="fas fa-qrcode"></i> QR
+  </a>`);
+
+  $qrBtn.on("click", (ev) => {
+    ev.preventDefault();
+    ev.stopPropagation();
+    showQRDialog(app.actor);
+  });
+
   // Try multiple injection points
   const headerSelectors = [
     ".window-header .window-title",
@@ -110,7 +128,9 @@ function injectDOMButton(app, html, data) {
     if ($target.length > 0) {
       if (selector.includes("window-title")) {
         $target.after($btn);
+        $target.after($qrBtn);
       } else {
+        $target.append($qrBtn);
         $target.append($btn);
       }
       injected = true;
@@ -271,4 +291,140 @@ async function exportCharacterPDF(actor, btnElement = null) {
       $btn.css("opacity", "1");
     }
   }
+}
+
+// ─────────────────────────────────────────────────
+// Webhook / Background Sync Logic
+// ─────────────────────────────────────────────────
+
+const _syncDebounceMap = new Map();
+
+async function getOrGenerateUUID(actor) {
+  let uuid = actor.getFlag(MODULE_ID, "webUuid");
+  if (!uuid) {
+    uuid = foundry.utils.randomID(16);
+    await actor.setFlag(MODULE_ID, "webUuid", uuid);
+  }
+  return uuid;
+}
+
+async function syncCharacterBackground(actor) {
+  if (actor.type !== "character") return;
+  // Solo sincronizar si es el owner (evita que los cambios los envíen múltiples clientes a la vez)
+  if (!actor.isOwner) return;
+
+  const apiUrl = game.settings.get(MODULE_ID, "apiUrl");
+  if (!apiUrl) return;
+
+  const uuid = await getOrGenerateUUID(actor);
+
+  // Debounce (2 segundos)
+  if (_syncDebounceMap.has(actor.id)) {
+    clearTimeout(_syncDebounceMap.get(actor.id));
+  }
+
+  const timeoutId = setTimeout(async () => {
+    _syncDebounceMap.delete(actor.id);
+    try {
+      console.log(`${MODULE_ID} | Background syncing actor: ${actor.name}`);
+      const actorData = actor.toObject();
+      
+      // Merge stats
+      if (actor.system?.stats) {
+        actorData.system.stats = foundry.utils.mergeObject(actorData.system.stats || {}, actor.system.stats);
+      }
+      if (actor.system?.pace) {
+        actorData.system.pace = foundry.utils.mergeObject(actorData.system.pace || {}, actor.system.pace);
+      }
+      
+      const imgBase64 = await fetchPortraitBase64(actor.img);
+      
+      const payload = {
+        uuid: uuid,
+        actor_data: actorData,
+        img_base64: imgBase64
+      };
+
+      const response = await fetch(`${apiUrl}/sync-character`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      
+      if (!response.ok) {
+        console.warn(`${MODULE_ID} | Background sync error: ${response.status}`);
+      }
+    } catch (e) {
+      console.warn(`${MODULE_ID} | Background sync failed silently:`, e);
+    }
+  }, 2000);
+
+  _syncDebounceMap.set(actor.id, timeoutId);
+}
+
+// Hooks para sincronización automática
+Hooks.on("updateActor", (actor, data, options, userId) => {
+  if (game.user.id !== userId) return;
+  syncCharacterBackground(actor);
+});
+
+Hooks.on("createItem", (item, options, userId) => {
+  if (game.user.id !== userId) return;
+  if (item.parent && item.parent instanceof Actor) syncCharacterBackground(item.parent);
+});
+
+Hooks.on("updateItem", (item, data, options, userId) => {
+  if (game.user.id !== userId) return;
+  if (item.parent && item.parent instanceof Actor) syncCharacterBackground(item.parent);
+});
+
+Hooks.on("deleteItem", (item, options, userId) => {
+  if (game.user.id !== userId) return;
+  if (item.parent && item.parent instanceof Actor) syncCharacterBackground(item.parent);
+});
+
+// ─────────────────────────────────────────────────
+// QR Dialog
+// ─────────────────────────────────────────────────
+
+async function showQRDialog(actor) {
+  const apiUrl = game.settings.get(MODULE_ID, "apiUrl");
+  if (!apiUrl) {
+    ui.notifications.error("API URL no configurada.");
+    return;
+  }
+  
+  const uuid = await getOrGenerateUUID(actor);
+  // Trigger sync just in case
+  syncCharacterBackground(actor);
+  
+  const baseUrl = apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl;
+  const viewUrl = `${baseUrl}/view/${uuid}`;
+  const qrUrl = `${baseUrl}/qr/${uuid}`;
+  
+  const html = `
+    <div style="text-align: center; padding: 15px;">
+      <h3 style="margin-bottom: 10px; border-bottom: 1px solid #777; padding-bottom: 5px;">
+        <i class="fas fa-mobile-alt"></i> Web View
+      </h3>
+      <p style="margin-bottom: 15px;">Escanea este código para ver la hoja de <b>${actor.name}</b>:</p>
+      <img src="${qrUrl}" alt="QR Code" style="width: 200px; height: 200px; border: 4px solid #fff; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.5);">
+      <p style="margin-top: 20px;">
+        Enlace directo:<br>
+        <a href="${viewUrl}" target="_blank" style="color: #4a90e2; word-break: break-all;">${viewUrl}</a>
+      </p>
+    </div>
+  `;
+  
+  new Dialog({
+    title: `Web Sync - ${actor.name}`,
+    content: html,
+    buttons: {
+      close: {
+        icon: '<i class="fas fa-check"></i>',
+        label: "Aceptar"
+      }
+    },
+    default: "close"
+  }).render(true);
 }

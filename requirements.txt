@@ -3,3 +3,5 @@ WeasyPrint
 fastapi
 uvicorn[standard]
 openai
+qrcode
+Pillow
