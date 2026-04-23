@@ -11,6 +11,8 @@ services:
       # Ejemplo: https://foundry.tudominio.com
       # Usa * para permitir todos (menos seguro).
       - CORS_ORIGINS=*
+    volumes:
+      - ./data:/app/data
     restart: unless-stopped
     healthcheck:
       test: [ "CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:80/health')\"" ]

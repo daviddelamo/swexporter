@@ -308,7 +308,7 @@ async function getOrGenerateUUID(actor) {
   return uuid;
 }
 
-async function syncCharacterBackground(actor) {
+async function syncCharacterBackground(actor, immediate = false) {
   if (actor.type !== "character") return;
   // Solo sincronizar si es el owner (evita que los cambios los envíen múltiples clientes a la vez)
   if (!actor.isOwner) return;
@@ -322,8 +322,8 @@ async function syncCharacterBackground(actor) {
   if (_syncDebounceMap.has(actor.id)) {
     clearTimeout(_syncDebounceMap.get(actor.id));
   }
-
-  const timeoutId = setTimeout(async () => {
+  
+  const doSync = async () => {
     _syncDebounceMap.delete(actor.id);
     try {
       console.log(`${MODULE_ID} | Background syncing actor: ${actor.name}`);
@@ -357,9 +357,14 @@ async function syncCharacterBackground(actor) {
     } catch (e) {
       console.warn(`${MODULE_ID} | Background sync failed silently:`, e);
     }
-  }, 2000);
+  };
 
-  _syncDebounceMap.set(actor.id, timeoutId);
+  if (immediate) {
+    doSync();
+  } else {
+    const timeoutId = setTimeout(doSync, 2000);
+    _syncDebounceMap.set(actor.id, timeoutId);
+  }
 }
 
 // Hooks para sincronización automática
@@ -395,8 +400,8 @@ async function showQRDialog(actor) {
   }
   
   const uuid = await getOrGenerateUUID(actor);
-  // Trigger sync just in case
-  syncCharacterBackground(actor);
+  // Trigger sync IMMEDIATELY just in case
+  await syncCharacterBackground(actor, true);
   
   const baseUrl = apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl;
   const viewUrl = `${baseUrl}/view/${uuid}`;
