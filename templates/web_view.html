@@ -273,10 +273,10 @@
 
             <h2 class="panel-title" style="font-size: 1.2rem; border-bottom: none; margin-bottom: 0;">Atributos</h2>
             <div class="attr-grid" style="grid-template-columns: 1fr;">
-                {% for attr, val in attributes.items() %}
+                {% for attr in attributes %}
                 <div class="attr-item">
-                    <span class="attr-name">{{ attr }}</span>
-                    <span class="die-badge">{{ val }}</span>
+                    <span class="attr-name">{{ attr.name }}</span>
+                    <span class="die-badge">{{ attr.die }}</span>
                 </div>
                 {% endfor %}
             </div>

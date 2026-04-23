@@ -231,4 +231,7 @@ async def view_character(uuid: str):
         
         return HTMLResponse(content=html_content)
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error renderizando la vista web: {str(e)}")
+        import traceback
+        error_details = traceback.format_exc()
+        print(f"Error rendering web view:\n{error_details}")
+        raise HTTPException(status_code=500, detail=f"Error renderizando la vista web: {str(e)}\n\nTraceback:\n{error_details}")
