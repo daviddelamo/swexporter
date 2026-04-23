@@ -182,7 +182,10 @@ async def sync_character(request: SyncCharacterRequest):
             
         return {"status": "success", "uuid": request.uuid}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error sincronizando personaje: {str(e)}")
+        import traceback
+        error_details = traceback.format_exc()
+        print(f"Error in sync_character:\n{error_details}")
+        raise HTTPException(status_code=500, detail=f"Error sincronizando personaje: {str(e)}\n\nTraceback:\n{error_details}")
 
 
 @app.get("/qr/{uuid}")
