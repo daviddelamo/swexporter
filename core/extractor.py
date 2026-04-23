@@ -64,6 +64,12 @@ def format_die(die_data: dict) -> str:
         return "—"
     sides = die_data.get("sides", 0)
     modifier = die_data.get("modifier", 0)
+    
+    if sides is None:
+        sides = 0
+    if modifier is None:
+        modifier = 0
+        
     if sides == 0:
         return "—"
     result = f"d{sides}"
