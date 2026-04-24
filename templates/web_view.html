@@ -8,10 +8,13 @@
     <style>
         :root {
             /* Pathfinder / Parchment Aesthetic */
-            --bg-color: #fdf5e6;
-            --paper-bg: #f4ebd8;
-            --panel-border: #5a3a22;
+            --bg-color: #d8c8b8;
+            --paper-bg: #f0e6d2;
+            --panel-border: #5c3817;
+            --panel-border-inner: #946943;
             --accent-red: #8b1e1e;
+            --banner-bg: #7a1515;
+            --banner-text: #fdf5e6;
             --accent-gold: #c28e0e;
             --text-main: #2b1b17;
             --text-muted: #5a4a42;
@@ -26,7 +29,9 @@
 
         body {
             background-color: var(--bg-color);
-            background-image: url('https://www.transparenttextures.com/patterns/parchment.png');
+            background-image: 
+                radial-gradient(circle at center, rgba(255,255,255,0.3) 0%, rgba(0,0,0,0.15) 100%),
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.2'/%3E%3C/svg%3E");
             color: var(--text-main);
             font-family: 'Lora', serif;
             line-height: 1.6;
@@ -59,37 +64,58 @@
         /* Panels */
         .panel {
             background: var(--paper-bg);
-            background-image: url('https://www.transparenttextures.com/patterns/aged-paper.png');
-            border: 2px solid var(--panel-border);
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
+            border: 4px solid var(--panel-border);
             border-radius: 4px;
             padding: 1.5rem;
-            box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.15);
+            box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.25), inset 0 0 20px rgba(92, 56, 23, 0.15);
             position: relative;
         }
 
         .panel::before {
             content: '';
             position: absolute;
-            top: 4px; left: 4px; right: 4px; bottom: 4px;
-            border: 1px solid rgba(90, 58, 34, 0.3);
+            top: 2px; left: 2px; right: 2px; bottom: 2px;
+            border: 1px solid var(--panel-border-inner);
             pointer-events: none;
         }
 
         .panel-title {
-            color: var(--accent-red);
-            font-size: 1.4rem;
-            border-bottom: 2px solid var(--accent-red);
-            padding-bottom: 0.3rem;
-            margin-bottom: 1rem;
+            background: linear-gradient(to bottom, #8f1b1b, #661010);
+            color: var(--banner-text);
+            font-size: 1.5rem;
+            text-align: center;
+            border: 2px solid var(--panel-border);
+            padding: 0.5rem 1rem;
+            margin-bottom: 1.5rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
             font-weight: 700;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3), inset 0 0 10px rgba(0,0,0,0.4);
+            border-radius: 4px;
+            position: relative;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
         }
+
+        .panel-title::before, .panel-title::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            background: #2b1b17;
+            border-radius: 50%;
+            box-shadow: inset 0 1px 1px rgba(255,255,255,0.4), 0 1px 2px rgba(0,0,0,0.8);
+        }
+        .panel-title::before { left: 15px; }
+        .panel-title::after { right: 15px; }
 
         /* Sidebar Profile */
         .profile-header {
             text-align: center;
             margin-bottom: 1.5rem;
+            padding-top: 0.5rem;
         }
 
         .portrait {
@@ -98,7 +124,7 @@
             border-radius: 5px;
             object-fit: cover;
             border: 3px solid var(--panel-border);
-            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
             margin: 0 auto 1rem auto;
             display: block;
             background: #e0d5c1;
@@ -106,16 +132,17 @@
 
         .char-name {
             font-size: 2.2rem;
-            color: var(--accent-red);
+            color: var(--banner-bg);
             margin-bottom: 0.2rem;
             line-height: 1.1;
+            text-shadow: 1px 1px 0 rgba(255,255,255,0.5);
         }
 
         .char-subtitle {
             color: var(--text-muted);
             font-style: italic;
             font-size: 1rem;
-            border-bottom: 1px solid var(--panel-border);
+            border-bottom: 1px solid var(--panel-border-inner);
             padding-bottom: 1rem;
         }
 
@@ -128,27 +155,40 @@
         }
 
         .stat-box {
-            background: rgba(255, 255, 255, 0.3);
-            border: 1px solid var(--panel-border);
+            background: rgba(255, 255, 255, 0.4);
+            border: 2px solid var(--panel-border-inner);
             border-radius: 4px;
             padding: 0.8rem;
             text-align: center;
             box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+            position: relative;
+        }
+        
+        .stat-box::after {
+            content: '';
+            position: absolute;
+            top: 2px; left: 2px; right: 2px; bottom: 2px;
+            border: 1px solid rgba(255,255,255,0.5);
+            pointer-events: none;
         }
 
         .stat-value {
             font-size: 1.8rem;
             font-weight: bold;
-            color: var(--accent-red);
+            color: var(--banner-bg);
             font-family: 'Cinzel', serif;
+            text-shadow: 1px 1px 0px rgba(255,255,255,0.5);
         }
 
         .stat-label {
             font-size: 0.75rem;
             text-transform: uppercase;
             letter-spacing: 1px;
-            color: var(--text-muted);
+            color: var(--text-main);
             font-weight: bold;
+            border-top: 1px solid rgba(92, 56, 23, 0.2);
+            margin-top: 0.2rem;
+            padding-top: 0.2rem;
         }
 
         /* Attributes & Skills */
@@ -156,6 +196,10 @@
             display: grid;
             grid-template-columns: 1fr;
             gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid var(--panel-border-inner);
+            padding: 0.5rem;
+            border-radius: 3px;
         }
 
         @media (min-width: 600px) {
@@ -170,7 +214,10 @@
             justify-content: space-between;
             align-items: center;
             padding: 0.4rem;
-            border-bottom: 1px dashed rgba(90, 58, 34, 0.3);
+            border-bottom: 1px dashed rgba(92, 56, 23, 0.4);
+        }
+        .attr-item:last-child {
+            border-bottom: none;
         }
 
         .attr-name {
@@ -179,7 +226,7 @@
         }
 
         .die-badge {
-            color: var(--accent-red);
+            color: var(--banner-bg);
             font-weight: bold;
             font-family: 'Cinzel', serif;
             font-size: 1.1rem;
@@ -195,12 +242,15 @@
 
         .feature-item {
             padding: 0.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            border-left: 3px solid var(--banner-bg);
+            box-shadow: 1px 1px 3px rgba(0,0,0,0.05);
         }
 
         .feature-name {
             font-weight: bold;
             font-size: 1.1rem;
-            color: var(--accent-red);
+            color: var(--banner-bg);
             font-family: 'Cinzel', serif;
             display: block;
         }
@@ -223,6 +273,10 @@
         .table-container {
             overflow-x: auto;
             margin-top: 1rem;
+            background: rgba(255, 255, 255, 0.3);
+            border: 1px solid var(--panel-border-inner);
+            border-radius: 3px;
+            padding: 0.5rem;
         }
 
         table {
@@ -234,36 +288,38 @@
         th, td {
             padding: 0.6rem;
             text-align: left;
-            border-bottom: 1px solid rgba(90, 58, 34, 0.2);
+            border-bottom: 1px solid rgba(92, 56, 23, 0.2);
         }
 
         th {
             font-family: 'Cinzel', serif;
-            color: var(--text-muted);
+            color: var(--banner-bg);
             text-transform: uppercase;
             font-size: 0.85rem;
-            border-bottom: 2px solid var(--accent-red);
+            border-bottom: 2px solid var(--banner-bg);
+            font-weight: bold;
         }
 
         tr:hover td {
-            background: var(--highlight);
+            background: rgba(255, 255, 255, 0.5);
         }
 
         .item-name {
             font-weight: bold;
-            color: var(--accent-red);
+            color: var(--text-main);
         }
 
         .status-badge {
             font-size: 0.75rem;
             padding: 0.2rem 0.4rem;
             border-radius: 3px;
-            background: #d3c4a9;
+            background: rgba(92, 56, 23, 0.2);
             color: #333;
             white-space: nowrap;
+            font-weight: bold;
         }
         .status-badge.equipped {
-            background: var(--accent-red);
+            background: var(--banner-bg);
             color: white;
         }
     </style>
@@ -331,7 +387,7 @@
                 </div>
             </div>
 
-            <h2 class="panel-title" style="font-size: 1.2rem; margin-top: 1.5rem;">Atributos</h2>
+            <h2 class="panel-title">Atributos</h2>
             <div class="attr-grid">
                 {% for attr in attributes %}
                 <div class="attr-item">
@@ -386,11 +442,11 @@
                 </div>
 
                 <div>
-                    <h2 class="panel-title" style="color: #4a362f; border-color: #4a362f;">Complicaciones</h2>
+                    <h2 class="panel-title">Complicaciones</h2>
                     <ul class="feature-list">
                         {% for hind in hindrances %}
                         <li class="feature-item">
-                            <span class="feature-name" style="color: #4a362f;">{{ hind.name }} ({{ hind.severity }})</span>
+                            <span class="feature-name">{{ hind.name }} ({{ hind.severity }})</span>
                             {% if hind.description %}
                             <div class="feature-desc">{{ hind.description }}</div>
                             {% endif %}
