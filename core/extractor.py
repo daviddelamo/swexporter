@@ -278,6 +278,11 @@ def extract_derived_stats(data: dict) -> dict:
     if not isinstance(currency, (int, float)):
         currency = 0
 
+    status = system.get("status", {})
+    is_shaken = status.get("isShaken", False)
+    is_vulnerable = status.get("isVulnerable", False)
+    is_distracted = status.get("isDistracted", False)
+
     return {
         "speed": speed_val,
         "running_die": running_die,
@@ -297,6 +302,9 @@ def extract_derived_stats(data: dict) -> dict:
         "encumbrance_current": encumbrance_val,
         "encumbrance_max": encumbrance_max,
         "currency": currency,
+        "is_shaken": is_shaken,
+        "is_vulnerable": is_vulnerable,
+        "is_distracted": is_distracted,
     }
 
 

@@ -303,6 +303,34 @@
                 </div>
             </div>
 
+            <div style="margin-bottom: 2rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.8rem; border-bottom: 1px solid rgba(90, 58, 34, 0.2); padding-bottom: 0.5rem;">
+                    <div>
+                        <strong style="color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px;">Heridas</strong><br>
+                        <span style="font-family: 'Cinzel', serif; font-weight: bold; color: {% if derived.wounds_current > 0 %}#8b1e1e{% else %}var(--text-main){% endif %}; font-size: 1.2rem;">{{ derived.wounds_current }} / {{ derived.wounds_max }}</span>
+                    </div>
+                    <div style="text-align: right;">
+                        <strong style="color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px;">Fatiga</strong><br>
+                        <span style="font-family: 'Cinzel', serif; font-weight: bold; color: {% if derived.fatigue_current > 0 %}#c28e0e{% else %}var(--text-main){% endif %}; font-size: 1.2rem;">{{ derived.fatigue_current }} / {{ derived.fatigue_max }}</span>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    {% if derived.is_shaken %}
+                    <span style="background-color: #8b1e1e; color: white; padding: 0.2rem 0.5rem; border-radius: 3px; font-size: 0.8rem; font-weight: bold; font-family: 'Cinzel', serif;">Aturdido</span>
+                    {% endif %}
+                    {% if derived.is_vulnerable %}
+                    <span style="background-color: #c28e0e; color: white; padding: 0.2rem 0.5rem; border-radius: 3px; font-size: 0.8rem; font-weight: bold; font-family: 'Cinzel', serif;">Vulnerable</span>
+                    {% endif %}
+                    {% if derived.is_distracted %}
+                    <span style="background-color: #5a4a42; color: white; padding: 0.2rem 0.5rem; border-radius: 3px; font-size: 0.8rem; font-weight: bold; font-family: 'Cinzel', serif;">Distraído</span>
+                    {% endif %}
+                    {% if not derived.is_shaken and not derived.is_vulnerable and not derived.is_distracted %}
+                    <span style="color: var(--text-muted); font-size: 0.85rem; font-style: italic;">Estado Normal</span>
+                    {% endif %}
+                </div>
+            </div>
+
             <h2 class="panel-title" style="font-size: 1.2rem; margin-top: 1.5rem;">Atributos</h2>
             <div class="attr-grid">
                 {% for attr in attributes %}
