@@ -7,14 +7,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #0f1115;
-            --panel-bg: rgba(25, 28, 35, 0.7);
-            --panel-border: rgba(197, 172, 116, 0.3);
-            --accent-gold: #d4af37;
-            --accent-glow: rgba(212, 175, 55, 0.4);
-            --text-main: #e2e8f0;
-            --text-muted: #94a3b8;
-            --red-accent: #e11d48;
+            /* Pathfinder / Parchment Aesthetic */
+            --bg-color: #fdf5e6;
+            --paper-bg: #f4ebd8;
+            --panel-border: #5a3a22;
+            --accent-red: #8b1e1e;
+            --accent-gold: #c28e0e;
+            --text-main: #2b1b17;
+            --text-muted: #5a4a42;
+            --highlight: rgba(139, 30, 30, 0.05);
         }
 
         * {
@@ -25,14 +26,16 @@
 
         body {
             background-color: var(--bg-color);
-            background-image: 
-                radial-gradient(circle at 50% 0%, rgba(30, 35, 45, 1) 0%, rgba(15, 17, 21, 1) 70%),
-                url('https://www.transparenttextures.com/patterns/stardust.png');
+            background-image: url('https://www.transparenttextures.com/patterns/parchment.png');
             color: var(--text-main);
             font-family: 'Lora', serif;
             line-height: 1.6;
             min-height: 100vh;
-            padding: 2rem 1rem;
+            padding: 1rem;
+        }
+
+        @media (min-width: 600px) {
+            body { padding: 2rem 1rem; }
         }
 
         h1, h2, h3, h4, .cinzel {
@@ -47,67 +50,73 @@
             gap: 2rem;
         }
 
-        @media (min-width: 900px) {
+        @media (min-width: 950px) {
             .container {
                 grid-template-columns: 350px 1fr;
             }
         }
 
-        /* Glassmorphism Panels */
+        /* Panels */
         .panel {
-            background: var(--panel-bg);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--panel-border);
-            border-radius: 12px;
+            background: var(--paper-bg);
+            background-image: url('https://www.transparenttextures.com/patterns/aged-paper.png');
+            border: 2px solid var(--panel-border);
+            border-radius: 4px;
             padding: 1.5rem;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.15);
+            position: relative;
         }
 
-        .panel:hover {
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 15px var(--accent-glow);
+        .panel::before {
+            content: '';
+            position: absolute;
+            top: 4px; left: 4px; right: 4px; bottom: 4px;
+            border: 1px solid rgba(90, 58, 34, 0.3);
+            pointer-events: none;
         }
 
         .panel-title {
-            color: var(--accent-gold);
-            font-size: 1.5rem;
-            border-bottom: 1px solid var(--panel-border);
-            padding-bottom: 0.5rem;
+            color: var(--accent-red);
+            font-size: 1.4rem;
+            border-bottom: 2px solid var(--accent-red);
+            padding-bottom: 0.3rem;
             margin-bottom: 1rem;
-            text-shadow: 0 0 10px var(--accent-glow);
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
+            font-weight: 700;
         }
 
         /* Sidebar Profile */
         .profile-header {
             text-align: center;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }
 
         .portrait {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
+            width: 180px;
+            height: 180px;
+            border-radius: 5px;
             object-fit: cover;
-            border: 3px solid var(--accent-gold);
-            box-shadow: 0 0 20px var(--accent-glow);
-            margin: 0 auto 1.5rem auto;
+            border: 3px solid var(--panel-border);
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+            margin: 0 auto 1rem auto;
             display: block;
+            background: #e0d5c1;
         }
 
         .char-name {
-            font-size: 2.5rem;
-            color: var(--accent-gold);
-            text-shadow: 0 0 15px var(--accent-glow);
-            margin-bottom: 0.5rem;
+            font-size: 2.2rem;
+            color: var(--accent-red);
+            margin-bottom: 0.2rem;
             line-height: 1.1;
         }
 
         .char-subtitle {
             color: var(--text-muted);
             font-style: italic;
-            font-size: 1.1rem;
+            font-size: 1rem;
+            border-bottom: 1px solid var(--panel-border);
+            padding-bottom: 1rem;
         }
 
         /* Core Stats */
@@ -119,57 +128,64 @@
         }
 
         .stat-box {
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(255, 255, 255, 0.3);
             border: 1px solid var(--panel-border);
-            border-radius: 8px;
-            padding: 1rem;
+            border-radius: 4px;
+            padding: 0.8rem;
             text-align: center;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
         }
 
         .stat-value {
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: bold;
-            color: var(--accent-gold);
+            color: var(--accent-red);
             font-family: 'Cinzel', serif;
         }
 
         .stat-label {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             text-transform: uppercase;
             letter-spacing: 1px;
             color: var(--text-muted);
+            font-weight: bold;
         }
 
         /* Attributes & Skills */
         .attr-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 1rem;
+            grid-template-columns: 1fr;
+            gap: 0.5rem;
+        }
+
+        @media (min-width: 600px) {
+            .attr-grid-2col {
+                grid-template-columns: 1fr 1fr;
+                gap: 1rem;
+            }
         }
 
         .attr-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0.5rem;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding: 0.4rem;
+            border-bottom: 1px dashed rgba(90, 58, 34, 0.3);
         }
 
         .attr-name {
             font-weight: bold;
+            color: var(--text-main);
         }
 
         .die-badge {
-            background: linear-gradient(135deg, var(--accent-gold), #b8860b);
-            color: #000;
-            padding: 0.2rem 0.8rem;
-            border-radius: 12px;
+            color: var(--accent-red);
             font-weight: bold;
             font-family: 'Cinzel', serif;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+            font-size: 1.1rem;
         }
 
-        /* Lists (Edges, Hindrances) */
+        /* Lists (Edges, Hindrances, Powers) */
         .feature-list {
             list-style: none;
             display: flex;
@@ -178,62 +194,78 @@
         }
 
         .feature-item {
-            background: rgba(0, 0, 0, 0.2);
-            padding: 1rem;
-            border-radius: 8px;
-            border-left: 3px solid var(--accent-gold);
-        }
-        
-        .feature-item.hindrance {
-            border-left-color: var(--red-accent);
+            padding: 0.5rem;
         }
 
         .feature-name {
             font-weight: bold;
             font-size: 1.1rem;
-            color: var(--accent-gold);
-            margin-bottom: 0.3rem;
+            color: var(--accent-red);
             font-family: 'Cinzel', serif;
+            display: block;
         }
 
-        .feature-item.hindrance .feature-name {
-            color: var(--red-accent);
+        .feature-meta {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-style: italic;
+            display: block;
+            margin-bottom: 0.3rem;
         }
 
         .feature-desc {
             font-size: 0.95rem;
-            color: var(--text-muted);
+            color: var(--text-main);
+            text-align: justify;
         }
 
-        /* Weapons */
-        .weapon-table-container {
+        /* Tables for Weapons / Gear */
+        .table-container {
             overflow-x: auto;
+            margin-top: 1rem;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 1rem;
+            font-size: 0.95rem;
         }
 
         th, td {
-            padding: 0.75rem;
+            padding: 0.6rem;
             text-align: left;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(90, 58, 34, 0.2);
         }
 
         th {
             font-family: 'Cinzel', serif;
-            color: var(--accent-gold);
+            color: var(--text-muted);
             text-transform: uppercase;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
+            font-size: 0.85rem;
+            border-bottom: 2px solid var(--accent-red);
         }
 
         tr:hover td {
-            background: rgba(255,255,255,0.05);
+            background: var(--highlight);
         }
 
+        .item-name {
+            font-weight: bold;
+            color: var(--accent-red);
+        }
+
+        .status-badge {
+            font-size: 0.75rem;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            background: #d3c4a9;
+            color: #333;
+            white-space: nowrap;
+        }
+        .status-badge.equipped {
+            background: var(--accent-red);
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -246,33 +278,33 @@
                 {% if info.img_local %}
                     <img src="{{ info.img_local }}" alt="{{ info.name }}" class="portrait">
                 {% else %}
-                    <div class="portrait" style="background: #2a2d35; display: flex; align-items: center; justify-content: center; font-size: 3rem; color: #555;">?</div>
+                    <div class="portrait" style="display: flex; align-items: center; justify-content: center; font-size: 3rem; color: #8b1e1e;">?</div>
                 {% endif %}
                 <h1 class="char-name">{{ info.name }}</h1>
-                <div class="char-subtitle">{{ info.race }} | {{ info.rank }}</div>
+                <div class="char-subtitle">{{ info.species }} | {{ info.rank }}</div>
             </div>
 
             <div class="core-stats-grid">
                 <div class="stat-box">
-                    <div class="stat-value">{{ info.pace }}</div>
+                    <div class="stat-value">{{ derived.speed }}</div>
                     <div class="stat-label">Paso</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-value">{{ info.parry }}</div>
+                    <div class="stat-value">{{ derived.parry }}</div>
                     <div class="stat-label">Parada</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-value">{{ info.toughness }}</div>
+                    <div class="stat-value">{{ derived.toughness }}</div>
                     <div class="stat-label">Dureza</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-value" style="color: #60a5fa;">{{ info.bennies }}</div>
+                    <div class="stat-value" style="color: #2b1b17;">{{ derived.bennies_current }}</div>
                     <div class="stat-label">Benis</div>
                 </div>
             </div>
 
-            <h2 class="panel-title" style="font-size: 1.2rem; border-bottom: none; margin-bottom: 0;">Atributos</h2>
-            <div class="attr-grid" style="grid-template-columns: 1fr;">
+            <h2 class="panel-title" style="font-size: 1.2rem; margin-top: 1.5rem;">Atributos</h2>
+            <div class="attr-grid">
                 {% for attr in attributes %}
                 <div class="attr-item">
                     <span class="attr-name">{{ attr.name }}</span>
@@ -280,6 +312,13 @@
                 </div>
                 {% endfor %}
             </div>
+            
+            {% if info.biography %}
+            <div style="margin-top: 2rem; font-size: 0.9rem; color: var(--text-muted); text-align: justify;">
+                <strong style="font-family: 'Cinzel', serif; color: var(--accent-red); display:block; margin-bottom: 0.5rem; border-bottom: 1px solid var(--accent-red);">Biografía</strong>
+                {{ info.biography }}
+            </div>
+            {% endif %}
         </div>
     </aside>
 
@@ -289,50 +328,90 @@
         <!-- Habilidades -->
         <div class="panel">
             <h2 class="panel-title">Habilidades</h2>
-            <div class="attr-grid">
+            <div class="attr-grid attr-grid-2col">
                 {% for skill in skills %}
                 <div class="attr-item">
-                    <span class="attr-name">{{ skill.name }}</span>
+                    <span class="attr-name">{{ skill.name }} <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal;">({{ skill.attribute }})</span></span>
                     <span class="die-badge">{{ skill.die }}</span>
                 </div>
                 {% endfor %}
             </div>
         </div>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
-            <!-- Ventajas -->
-            <div class="panel">
-                <h2 class="panel-title">Ventajas</h2>
-                <ul class="feature-list">
-                    {% for edge in edges %}
-                    <li class="feature-item">
-                        <div class="feature-name">{{ edge.name }}</div>
-                    </li>
-                    {% else %}
-                    <li class="feature-item"><div class="feature-desc">No tiene ventajas.</div></li>
-                    {% endfor %}
-                </ul>
-            </div>
+        <!-- Ventajas y Complicaciones -->
+        <div class="panel">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;">
+                <div>
+                    <h2 class="panel-title">Ventajas</h2>
+                    <ul class="feature-list">
+                        {% for edge in edges %}
+                        <li class="feature-item">
+                            <span class="feature-name">{{ edge.name }}</span>
+                            {% if edge.description %}
+                            <div class="feature-desc">{{ edge.description }}</div>
+                            {% endif %}
+                        </li>
+                        {% else %}
+                        <li class="feature-item"><div class="feature-desc" style="font-style: italic;">No tiene ventajas.</div></li>
+                        {% endfor %}
+                    </ul>
+                </div>
 
-            <!-- Complicaciones -->
-            <div class="panel">
-                <h2 class="panel-title" style="color: var(--red-accent);">Complicaciones</h2>
-                <ul class="feature-list">
-                    {% for hind in hindrances %}
-                    <li class="feature-item hindrance">
-                        <div class="feature-name">{{ hind.name }}</div>
-                    </li>
-                    {% else %}
-                    <li class="feature-item"><div class="feature-desc">No tiene complicaciones.</div></li>
-                    {% endfor %}
-                </ul>
+                <div>
+                    <h2 class="panel-title" style="color: #4a362f; border-color: #4a362f;">Complicaciones</h2>
+                    <ul class="feature-list">
+                        {% for hind in hindrances %}
+                        <li class="feature-item">
+                            <span class="feature-name" style="color: #4a362f;">{{ hind.name }} ({{ hind.severity }})</span>
+                            {% if hind.description %}
+                            <div class="feature-desc">{{ hind.description }}</div>
+                            {% endif %}
+                        </li>
+                        {% else %}
+                        <li class="feature-item"><div class="feature-desc" style="font-style: italic;">No tiene complicaciones.</div></li>
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
         </div>
+        
+        <!-- Poderes Mágicos -->
+        {% if magic.has_powers %}
+        <div class="panel">
+            <h2 class="panel-title">Poderes y Magia</h2>
+            
+            <div style="margin-bottom: 1rem; display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+                {% if magic.arcane_background %}
+                <div style="background: rgba(255,255,255,0.5); padding: 0.5rem 1rem; border-radius: 4px; border: 1px solid var(--panel-border);">
+                    <strong>Trasfondo:</strong> {{ magic.arcane_background }}
+                </div>
+                {% endif %}
+                
+                {% if magic.power_points.max > 0 %}
+                <div style="background: rgba(255,255,255,0.5); padding: 0.5rem 1rem; border-radius: 4px; border: 1px solid var(--panel-border);">
+                    <strong>Puntos de Poder:</strong> <span style="color: var(--accent-red); font-weight: bold; font-size: 1.1rem;">{{ magic.power_points.current }} / {{ magic.power_points.max }}</span>
+                </div>
+                {% endif %}
+            </div>
 
-        <!-- Combate -->
+            <ul class="feature-list">
+                {% for p in magic.powers %}
+                <li class="feature-item" style="border-bottom: 1px solid rgba(90, 58, 34, 0.1); padding-bottom: 1rem;">
+                    <span class="feature-name">{{ p.name }}</span>
+                    <span class="feature-meta">Coste: {{ p.pp }} | Rango: {{ p.range }} | Duración: {{ p.duration }}</span>
+                    {% if p.description %}
+                    <div class="feature-desc" style="margin-top: 0.5rem;">{{ p.description }}</div>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <!-- Combate / Armas -->
         <div class="panel">
             <h2 class="panel-title">Ataques y Armas</h2>
-            <div class="weapon-table-container">
+            <div class="table-container">
                 <table>
                     <thead>
                         <tr>
@@ -340,56 +419,78 @@
                             <th>Daño</th>
                             <th>PA</th>
                             <th>Rango</th>
-                            <th>Notas</th>
+                            <th>Estado</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for w in weapons %}
                         <tr>
-                            <td style="font-weight: bold; color: var(--accent-gold);">{{ w.name }}</td>
-                            <td>{{ w.damage }}</td>
+                            <td class="item-name">{{ w.name }}</td>
+                            <td style="font-weight: bold;">{{ w.damage }}</td>
                             <td>{{ w.ap }}</td>
                             <td>{{ w.range }}</td>
-                            <td style="color: var(--text-muted); font-size: 0.9rem;">{{ w.notes }}</td>
+                            <td>
+                                <span class="status-badge {% if w.equipped == 'Equipado' %}equipped{% endif %}">
+                                    {{ w.equipped }}
+                                </span>
+                            </td>
                         </tr>
                         {% else %}
-                        <tr><td colspan="5" style="text-align: center; color: var(--text-muted);">Sin armas equipadas</td></tr>
+                        <tr><td colspan="5" style="text-align: center; font-style: italic;">Sin armas</td></tr>
                         {% endfor %}
                     </tbody>
                 </table>
             </div>
         </div>
         
-        <!-- Poderes -->
-        {% if powers %}
+        <!-- Equipamiento General -->
         <div class="panel">
-            <h2 class="panel-title" style="color: #c084fc; text-shadow: 0 0 10px rgba(192, 132, 252, 0.4);">Poderes</h2>
-            <div class="weapon-table-container">
+            <h2 class="panel-title">Equipamiento y Armadura</h2>
+            <div class="table-container">
                 <table>
                     <thead>
                         <tr>
-                            <th>Poder</th>
-                            <th>Coste</th>
-                            <th>Rango</th>
-                            <th>Duración</th>
-                            <th>Notas</th>
+                            <th>Objeto</th>
+                            <th>Cantidad</th>
+                            <th>Peso</th>
+                            <th>Estado</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for p in powers %}
+                        {% for a in armor %}
                         <tr>
-                            <td style="font-weight: bold; color: #c084fc;">{{ p.name }}</td>
-                            <td>{{ p.cost }}</td>
-                            <td>{{ p.range }}</td>
-                            <td>{{ p.duration }}</td>
-                            <td style="color: var(--text-muted); font-size: 0.9rem;">{{ p.notes }}</td>
+                            <td class="item-name">{{ a.name }} <span style="font-size: 0.8rem; color: var(--text-muted);">(Armadura: {{ a.armor }})</span></td>
+                            <td>1</td>
+                            <td>{{ a.weight }}</td>
+                            <td><span class="status-badge {% if a.equipped == 'Equipado' %}equipped{% endif %}">{{ a.equipped }}</span></td>
                         </tr>
                         {% endfor %}
+                        
+                        {% for s in shields %}
+                        <tr>
+                            <td class="item-name">{{ s.name }} <span style="font-size: 0.8rem; color: var(--text-muted);">(Parada: {{ s.parry }})</span></td>
+                            <td>1</td>
+                            <td>{{ s.weight }}</td>
+                            <td><span class="status-badge {% if s.equipped == 'Equipado' %}equipped{% endif %}">{{ s.equipped }}</span></td>
+                        </tr>
+                        {% endfor %}
+                        
+                        {% for g in gear %}
+                        <tr>
+                            <td style="font-weight: bold;">{{ g.name }}</td>
+                            <td>{{ g.quantity }}</td>
+                            <td>{{ g.weight }}</td>
+                            <td><span class="status-badge {% if g.equipped == 'Equipado' %}equipped{% endif %}">{{ g.equipped }}</span></td>
+                        </tr>
+                        {% endfor %}
+                        
+                        {% if not armor and not shields and not gear %}
+                        <tr><td colspan="4" style="text-align: center; font-style: italic;">Mochila vacía</td></tr>
+                        {% endif %}
                     </tbody>
                 </table>
             </div>
         </div>
-        {% endif %}
 
     </main>
 </div>
