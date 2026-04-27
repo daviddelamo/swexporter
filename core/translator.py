@@ -42,6 +42,7 @@ def translate_to_spanish(text: str) -> str:
         return text
 
     try:
+        logger.info(f"Llamando a la IA para traducir: {text}")
         client = OpenAI(
             api_key=api_key,
             base_url="https://integrate.api.nvidia.com/v1",
@@ -55,9 +56,12 @@ def translate_to_spanish(text: str) -> str:
   temperature=1,
   top_p=0.95,
   max_tokens=8192,
-  extra_body={"chat_template_kwargs": {"thinking":True}},
-  stream=True
+  extra_body={"chat_template_kwargs": {"thinking":False}},
+  stream=False
         )
+
+        logger.info(f"Respuesta de la IA: {response}")
+
         translated = response.choices[0].message.content.strip()
         if translated:
             _translation_cache[text] = translated
