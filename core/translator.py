@@ -24,8 +24,6 @@ Responde ÚNICAMENTE con la traducción directa. No añadas notas, explicaciones
 """
 
 def translate_to_spanish(text: str) -> str:
-
-    return text
     """
     Traduce un texto al español usando Grok API (xAI) con contexto de Savage Pathfinder.
     Utiliza un caché en memoria para mejorar el rendimiento.
@@ -46,15 +44,19 @@ def translate_to_spanish(text: str) -> str:
     try:
         client = OpenAI(
             api_key=api_key,
-            base_url="https://api.x.ai/v1",
+            base_url="https://integrate.api.nvidia.com/v1",
         )
         response = client.chat.completions.create(
-            model="grok-4-1-fast-non-reasoning",
+            model="deepseek-ai/deepseek-v3.2",
             messages=[
                 {"role": "system", "content": SYSTEM_INSTRUCTION},
                 {"role": "user", "content": text},
             ],
-            temperature=0.1
+  temperature=1,
+  top_p=0.95,
+  max_tokens=8192,
+  extra_body={"chat_template_kwargs": {"thinking":True}},
+  stream=True
         )
         translated = response.choices[0].message.content.strip()
         if translated:
