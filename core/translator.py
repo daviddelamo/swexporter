@@ -23,6 +23,10 @@ Términos obligatorios:
 Responde ÚNICAMENTE con la traducción directa. No añadas notas, explicaciones, ni comillas extra.
 """
 
+RIVA_TRANSLATE_PROMPT = """
+You are an expert at translating text from English to Spanish.
+"""
+
 def translate_to_spanish(text: str) -> str:
     """
     Traduce un texto al español usando Grok API (xAI) con contexto de Savage Pathfinder.
@@ -36,9 +40,9 @@ def translate_to_spanish(text: str) -> str:
     if text in _translation_cache:
         return _translation_cache[text]
         
-    api_key = os.environ.get("XAI_API_KEY")
+    api_key = os.environ.get("RIVA_API_KEY")
     if not api_key:
-        logger.warning("No se encontró XAI_API_KEY en las variables de entorno. Devolviendo texto original.")
+        logger.warning("No se encontró RIVA_API_KEY en las variables de entorno. Devolviendo texto original.")
         return text
 
     try:
@@ -48,16 +52,16 @@ def translate_to_spanish(text: str) -> str:
             base_url="https://integrate.api.nvidia.com/v1",
         )
         response = client.chat.completions.create(
-            model="deepseek-ai/deepseek-v3.2",
+            model="riva-translate-4b-instruct-v1_1",
             messages=[
                 {"role": "system", "content": SYSTEM_INSTRUCTION},
-                {"role": "user", "content": text},
+                {"role": "user", "content": "What is the spanish translation of the sentence: "+text+"?"},
             ],
-  temperature=1,
-  top_p=0.95,
-  max_tokens=8192,
-  extra_body={"chat_template_kwargs": {"thinking":False}},
-  stream=False
+            temperature=1,
+            top_p=0.95,
+            max_tokens=8192,
+            extra_body={"chat_template_kwargs": {"thinking":False}},
+            stream=False
         )
 
         logger.info(f"Respuesta de la IA: {response}")
