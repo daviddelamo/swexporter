@@ -254,7 +254,8 @@ async function exportCharacterPDF(actor, btnElement = null) {
       img_base64: imgBase64,
     };
 
-    const response = await fetch(`${apiUrl}/generate-pdf`, {
+    const baseUrl = apiUrl.replace(/\/+$/, "");
+    const response = await fetch(`${baseUrl}/generate-pdf`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),

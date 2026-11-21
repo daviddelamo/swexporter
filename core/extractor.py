@@ -58,18 +58,29 @@ def safe_get(data: dict, *keys, default=None):
     return current if current is not None else default
 
 
+def _num(mapping, key: str, default=0):
+    """Obtiene un valor numérico de un dict, usando default si falta, es None o no es numérico."""
+    if not isinstance(mapping, dict):
+        return default
+    val = mapping.get(key, default)
+    if val is None or isinstance(val, bool):
+        return default
+    if isinstance(val, (int, float)):
+        return val
+    try:
+        parsed = float(val)
+        return int(parsed) if parsed.is_integer() else parsed
+    except (ValueError, TypeError):
+        return default
+
+
 def format_die(die_data: dict) -> str:
     """Formatea un dado SWADE: {sides: 8, modifier: 1} → 'd8+1'."""
     if not die_data or not isinstance(die_data, dict):
         return "—"
-    sides = die_data.get("sides", 0)
-    modifier = die_data.get("modifier", 0)
-    
-    if sides is None:
-        sides = 0
-    if modifier is None:
-        modifier = 0
-        
+    sides = _num(die_data, "sides", 0)
+    modifier = _num(die_data, "modifier", 0)
+
     if sides == 0:
         return "—"
     result = f"d{sides}"
@@ -205,13 +216,13 @@ def extract_attributes(data: dict) -> list:
     attributes = []
     for key in ATTR_ORDER:
         attr = attrs_data.get(key, {})
-        die = attr.get("die", {})
+        die = attr.get("die", {}) if isinstance(attr, dict) else {}
         attributes.append({
             "key": key,
             "name": ATTR_NAMES.get(key, key.capitalize()),
             "die": format_die(die),
-            "sides": die.get("sides", 0),
-            "modifier": die.get("modifier", 0),
+            "sides": _num(die, "sides", 0),
+            "modifier": _num(die, "modifier", 0),
         })
     return attributes
 
@@ -223,60 +234,48 @@ def extract_derived_stats(data: dict) -> dict:
     details = system.get("details", {})
 
     pace = system.get("pace", {})
-    if pace and isinstance(pace, dict) and pace.get("ground"):
-        speed_val = pace.get("ground", 6)
+    if pace and isinstance(pace, dict) and _num(pace, "ground", 0):
+        speed_val = _num(pace, "ground", 6)
         running_raw = pace.get("running", {})
         if isinstance(running_raw, dict):
-            running_die = format_die({"sides": running_raw.get("die", 6), "modifier": running_raw.get("mod", 0)})
+            running_die = format_die({"sides": _num(running_raw, "die", 6), "modifier": _num(running_raw, "mod", 0)})
         else:
             running_die = "d6"
     else:
-        speed_val = safe_get(stats, "speed", "adjusted", default=0)
-        if not speed_val:
-            speed_val = safe_get(stats, "speed", "value", default=6)
+        speed_block = stats.get("speed", {}) if isinstance(stats, dict) else {}
+        speed_val = _num(speed_block, "adjusted", 0) or _num(speed_block, "value", 6)
         running_die = format_die(safe_get(stats, "speed", "runningDie", default={}))
 
-    parry_val = safe_get(stats, "parry", "value", default=2)
-    parry_mod = safe_get(stats, "parry", "modifier", default=0)
-    parry_shield = safe_get(stats, "parry", "shield", default=0)
+    parry_block = stats.get("parry", {}) if isinstance(stats, dict) else {}
+    parry_val = _num(parry_block, "value", 2)
+    parry_mod = _num(parry_block, "modifier", 0)
+    parry_shield = _num(parry_block, "shield", 0)
 
-    toughness_val = safe_get(stats, "toughness", "value", default=2)
-    toughness_armor = safe_get(stats, "toughness", "armor", default=0)
+    toughness_block = stats.get("toughness", {}) if isinstance(stats, dict) else {}
+    toughness_val = _num(toughness_block, "value", 2)
+    toughness_armor = _num(toughness_block, "armor", 0)
     toughness_base = toughness_val - toughness_armor
 
-    size = safe_get(stats, "size", default=0)
+    size = _num(stats, "size", 0)
 
     vitals = system.get("vitals", {})
     bennies = system.get("bennies", vitals.get("bennies", {}))
-    if isinstance(bennies, dict):
-        bennies_current = bennies.get("value", 0)
-        bennies_max = bennies.get("max", 3)
-    else:
-        bennies_current = 0
-        bennies_max = 3
+    bennies_current = _num(bennies, "value", 0)
+    bennies_max = _num(bennies, "max", 3)
 
     wounds = system.get("wounds", vitals.get("wounds", {}))
-    if isinstance(wounds, dict):
-        wounds_current = wounds.get("value", 0)
-        wounds_max = wounds.get("max", 3)
-    else:
-        wounds_current = 0
-        wounds_max = 3
+    wounds_current = _num(wounds, "value", 0)
+    wounds_max = _num(wounds, "max", 3)
 
     fatigue = system.get("fatigue", vitals.get("fatigue", {}))
-    if isinstance(fatigue, dict):
-        fatigue_current = fatigue.get("value", 0)
-        fatigue_max = fatigue.get("max", 2)
-    else:
-        fatigue_current = 0
-        fatigue_max = 2
+    fatigue_current = _num(fatigue, "value", 0)
+    fatigue_max = _num(fatigue, "max", 2)
 
-    encumbrance_val = safe_get(system, "encumbrance", "value", default=0)
-    encumbrance_max = safe_get(system, "encumbrance", "max", default=0)
+    encumbrance = system.get("encumbrance", {})
+    encumbrance_val = _num(encumbrance, "value", 0)
+    encumbrance_max = _num(encumbrance, "max", 0)
 
-    currency = details.get("currency", system.get("currency", 0))
-    if not isinstance(currency, (int, float)):
-        currency = 0
+    currency = _num(details, "currency", _num(system, "currency", 0))
 
     status = system.get("status", {})
     is_shaken = status.get("isShaken", False)
@@ -315,13 +314,13 @@ def extract_skills(data: dict) -> list:
     for item in items:
         if item.get("type") == "skill":
             sys = item.get("system", {})
-            die = sys.get("die", {})
+            die = sys.get("die", {}) if isinstance(sys, dict) else {}
             attr_key = sys.get("attribute", "")
             skills.append({
                 "name": translate_to_spanish(item.get("name", "Desconocida")),
                 "die": format_die(die),
-                "sides": die.get("sides", 0),
-                "modifier": die.get("modifier", 0),
+                "sides": _num(die, "sides", 0),
+                "modifier": _num(die, "modifier", 0),
                 "attribute": ATTR_NAMES.get(attr_key, attr_key),
                 "attribute_key": attr_key,
                 "is_core": sys.get("isCoreSkill", False),
@@ -392,15 +391,15 @@ def extract_weapons(data: dict) -> list:
             equip = sys.get("equipStatus", 0)
             weapons.append({
                 "name": translate_to_spanish(item.get("name", "")),
-                "damage": sys.get("damage", "—"),
-                "ap": sys.get("ap", 0),
-                "range": sys.get("range", "Cuerpo a cuerpo"),
-                "rof": sys.get("rof", "1"),
+                "damage": sys.get("damage") or "—",
+                "ap": _num(sys, "ap", 0),
+                "range": sys.get("range") or "Cuerpo a cuerpo",
+                "rof": sys.get("rof") or "1",
                 "notes": translate_to_spanish(sys.get("notes", "")),
-                "weight": sys.get("weight", 0),
-                "price": sys.get("price", 0),
-                "quantity": sys.get("quantity", 1),
-                "min_str": sys.get("minStr", "—"),
+                "weight": _num(sys, "weight", 0),
+                "price": _num(sys, "price", 0),
+                "quantity": _num(sys, "quantity", 1),
+                "min_str": sys.get("minStr") or "—",
                 "equipped": EQUIP_STATUS.get(equip, "Desconocido"),
                 "skill": safe_get(sys, "actions", "skill", default=""),
             })
@@ -428,11 +427,11 @@ def extract_armor(data: dict) -> list:
                 covered.append("Piernas")
             armor_list.append({
                 "name": translate_to_spanish(item.get("name", "")),
-                "armor": sys.get("armor", 0),
+                "armor": _num(sys, "armor", 0),
                 "notes": translate_to_spanish(sys.get("notes", "")),
-                "weight": sys.get("weight", 0),
-                "price": sys.get("price", 0),
-                "min_str": sys.get("minStr", "—"),
+                "weight": _num(sys, "weight", 0),
+                "price": _num(sys, "price", 0),
+                "min_str": sys.get("minStr") or "—",
                 "equipped": EQUIP_STATUS.get(equip, "Desconocido"),
                 "locations": ", ".join(covered) if covered else "—",
             })
@@ -450,13 +449,13 @@ def extract_shields(data: dict) -> list:
             equip = sys.get("equipStatus", 0)
             shields.append({
                 "name": translate_to_spanish(item.get("name", "")),
-                "parry": sys.get("parry", 0),
-                "cover": sys.get("cover", 0),
-                "armor": sys.get("armor", 0),
+                "parry": _num(sys, "parry", 0),
+                "cover": _num(sys, "cover", 0),
+                "armor": _num(sys, "armor", 0),
                 "notes": translate_to_spanish(sys.get("notes", "")),
-                "weight": sys.get("weight", 0),
-                "price": sys.get("price", 0),
-                "min_str": sys.get("minStr", "—"),
+                "weight": _num(sys, "weight", 0),
+                "price": _num(sys, "price", 0),
+                "min_str": sys.get("minStr") or "—",
                 "equipped": EQUIP_STATUS.get(equip, "Desconocido"),
             })
     shields.sort(key=lambda s: s["name"])
@@ -475,9 +474,9 @@ def extract_gear(data: dict) -> list:
             gear.append({
                 "name": translate_to_spanish(item.get("name", "")),
                 "description": translate_to_spanish(desc),
-                "weight": sys.get("weight", 0),
-                "price": sys.get("price", 0),
-                "quantity": sys.get("quantity", 1),
+                "weight": _num(sys, "weight", 0),
+                "price": _num(sys, "price", 0),
+                "quantity": _num(sys, "quantity", 1),
                 "equipped": EQUIP_STATUS.get(equip, "Desconocido"),
             })
     gear.sort(key=lambda g: g["name"])
@@ -495,8 +494,8 @@ def extract_powers(data: dict) -> dict:
     total_max = 0
     for pool_name, pool_val in pp_data.items():
         if isinstance(pool_val, dict):
-            p_cur = pool_val.get("value", 0) or 0
-            p_max = pool_val.get("max", 0) or 0
+            p_cur = _num(pool_val, "value", 0)
+            p_max = _num(pool_val, "max", 0)
             if p_max > 0:
                 pp_pools.append({
                     "name": pool_name,
