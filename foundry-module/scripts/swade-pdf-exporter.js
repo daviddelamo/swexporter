@@ -421,6 +421,19 @@ async function showQRDialog(actor) {
     </div>
   `;
   
+  const DialogV2 = foundry.applications?.api?.DialogV2;
+  if (DialogV2) {
+    await DialogV2.prompt({
+      window: { title: `Web Sync - ${actor.name}` },
+      content: html,
+      ok: {
+        icon: "fas fa-check",
+        label: "Aceptar",
+      },
+    });
+    return;
+  }
+
   new Dialog({
     title: `Web Sync - ${actor.name}`,
     content: html,
