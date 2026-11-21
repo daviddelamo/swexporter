@@ -6,7 +6,7 @@ from openai import OpenAI
 logger = logging.getLogger(__name__)
 
 NVIDIA_BASE_URL = "https://integrate.api.nvidia.com/v1"
-DEFAULT_TRANSLATION_MODEL = "google/gemma-4-31b-it"
+DEFAULT_TRANSLATION_MODEL = "nvidia/nemotron-3.5-bolt-e4b"
 
 # Cache en memoria para evitar llamadas redundantes a la API
 _translation_cache = {}
@@ -62,6 +62,7 @@ def translate_to_spanish(text: str) -> str:
         client = OpenAI(
             api_key=api_key,
             base_url=NVIDIA_BASE_URL,
+            timeout=30.0,
         )
         response = client.chat.completions.create(
             model=model,
