@@ -266,17 +266,31 @@ async function exportCharacterPDF(actor, btnElement = null) {
     }
 
     const pdfBlob = await response.blob();
-    const charName = actor.name.replace(/[^\w\s-]/g, "").trim().replace(/\s+/g, "_");
-    const filename = `${charName}.pdf`;
+    if (!pdfBlob || pdfBlob.size === 0) {
+      throw new Error("El servidor devolvió un PDF vacío");
+    }
 
-    const url = URL.createObjectURL(pdfBlob);
+    const typedBlob = pdfBlob.type === "application/pdf"
+      ? pdfBlob
+      : new Blob([pdfBlob], { type: "application/pdf" });
+    const charName = actor.name.replace(/[^\w\s-]/g, "").trim().replace(/\s+/g, "_");
+    const filename = `${charName || "character"}.pdf`;
+
+    console.log(`${MODULE_ID} | Triggering download: ${filename} (${typedBlob.size} bytes)`);
+
+    const url = URL.createObjectURL(typedBlob);
     const a = document.createElement("a");
+    a.style.display = "none";
     a.href = url;
     a.download = filename;
     document.body.appendChild(a);
     a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+
+    // Delay cleanup so the browser/Electron download stream can read the blob URL
+    setTimeout(() => {
+      a.remove();
+      URL.revokeObjectURL(url);
+    }, 10000);
 
     ui.notifications.info(game.i18n.localize("SWADE_PDF.Success"));
 
